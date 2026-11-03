@@ -97,6 +97,8 @@ section{padding:40px 0}
 .offer__sub{font-size:12px;color:var(--muted)}
 .offer__save{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--ok);border-radius:6px;padding:2px 8px;margin-top:4px}
 .offer__prices{text-align:right}
+.offer__img{width:58px;height:58px;border-radius:10px;object-fit:cover;flex:none;background:#141414}
+@media (max-width:360px){.offer__img{width:46px;height:46px}}
 .offer__prices b{display:block;font-size:16px}
 .offer__prices s{font-size:13px;color:#9a97a3}
 .offer__tag{position:absolute;top:-11px;right:12px;font-size:11px;font-weight:700;background:var(--brand);color:#fff;border-radius:999px;padding:2px 10px}
@@ -154,6 +156,8 @@ section{padding:40px 0}
 .map-hint{font-size:12px;color:var(--muted);margin-top:5px}
 .map-hint.ok{color:var(--ok);font-weight:600}
 .map-hint.bad{color:#c0233b}
+.map-hint.approx{color:var(--brand-dark);font-weight:600}
+.pin-ok{border:0;background:var(--ok);color:#fff;font:inherit;font-size:12px;font-weight:700;border-radius:999px;padding:4px 10px;margin:2px 2px;cursor:pointer}
 .done{padding:22px 16px 20px}
 .done__top{text-align:center;margin-bottom:16px}
 .done__check{width:58px;height:58px;margin:0 auto 10px;border-radius:50%;background:var(--ok);color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 8px #e7f6dc;animation:pop .45s ease-out}
@@ -495,9 +499,9 @@ const CONFIG = {
 
   /* Precios del catálogo. compare = el mismo frasco comprado suelto (ahorro real del combo). */
   offers: [
-    { id: "1u", title: "1 frasco · 60 cápsulas",   sub: "Rinde 30 días",  qty: 1, price: 159000 },
-    { id: "2u", title: "2 frascos · 120 cápsulas", sub: "Rinde 60 días",  qty: 2, price: 259000, compare: 318000, tag: "⭐ EL MÁS ELEGIDO", default: true },
-    { id: "3u", title: "3 frascos · 180 cápsulas", sub: "Rinde 90 días",  qty: 3, price: 320000, compare: 477000, tag: "🔥 MEJOR PRECIO" }
+    { id: "1u", title: "1 frasco · 60 cápsulas",   sub: "Rinde 30 días", img: "img/combo-1.webp", qty: 1, price: 159000 },
+    { id: "2u", title: "2 frascos · 120 cápsulas", sub: "Rinde 60 días", img: "img/combo-2.webp", qty: 2, price: 259000, compare: 318000, tag: "⭐ EL MÁS ELEGIDO", default: true },
+    { id: "3u", title: "3 frascos · 180 cápsulas", sub: "Rinde 90 días", img: "img/combo-3.webp", qty: 3, price: 320000, compare: 477000, tag: "🔥 MEJOR PRECIO" }
   ],
 
   countdownMinutes: 0,   // sin contador: no hay una oferta que venza
@@ -640,6 +644,7 @@ function renderOffers() {
     <label class="offer" data-checked="${o.id === selected.id}">
       ${o.tag ? `<span class="offer__tag">${esc(o.tag)}</span>` : ""}
       <input type="radio" name="${box}" value="${o.id}" ${o.id === selected.id ? "checked" : ""}>
+      ${o.img ? `<img class="offer__img" src="${esc(o.img)}" alt="" loading="lazy">` : ""}
       <div class="offer__body"><div class="offer__title">${esc(o.title)}</div>${o.sub ? `<div class="offer__sub">${esc(o.sub)}</div>` : ""}${pct(o) ? `<span class="offer__save">Ahorrá ${pct(o)}%</span>` : ""}</div>
       <div class="offer__prices"><b>${money(o.price)}</b>${o.compare ? `<s>${money(o.compare)}</s>` : ""}</div>
     </label>`).join("");
@@ -655,7 +660,7 @@ function updatePrice() {
   $("priceSave").hidden = !pct(selected);
   $("buyBtn").textContent = `Comprar ahora – ${money(selected.price)}`;
   const subtotal = selected.compare || selected.price;
-  $("sumImg").src = P.images[0];
+  $("sumImg").src = selected.img || P.images[0];
   $("sumOffer").textContent = selected.title;
   $("sumSub2").textContent = selected.sub || "";
   $("sumPrice").textContent = money(selected.price);
@@ -699,7 +704,9 @@ function validate() {
 }
 
 /* --- Mapa de entrega (Leaflet + OpenStreetMap, se carga al abrir el checkout) --- */
-const pick = { map: null, marker: null, url: "", loading: null };
+// url solo se llena con una ubicación confirmada (GPS, toque, arrastre o "Sí, es acá"):
+// el pin aproximado de la dirección escrita no se manda al delivery sin confirmar.
+const pick = { map: null, marker: null, url: "", loading: null, lastQuery: "" };
 function loadLeaflet() {
   if (window.L) return Promise.resolve();
   if (pick.loading) return pick.loading;
@@ -714,16 +721,50 @@ function loadLeaflet() {
   });
   return pick.loading;
 }
-function setPin(lat, lng, zoom) {
+function setPin(lat, lng, zoom, approx = false) {
   const pos = [+lat.toFixed(6), +lng.toFixed(6)];
   if (!pick.marker) {
     pick.marker = L.marker(pos, { draggable: true }).addTo(pick.map);
     pick.marker.on("dragend", () => { const p = pick.marker.getLatLng(); setPin(p.lat, p.lng); });
   } else pick.marker.setLatLng(pos);
   if (zoom) pick.map.setView(pos, zoom);
+  const hint = $("mapHint");
+  if (approx) {
+    pick.url = "";
+    hint.className = "map-hint approx";
+    hint.innerHTML = `📍 Ubicación aproximada según tu dirección. <button type="button" class="pin-ok" id="pinOk">✅ Sí, es acá</button> o arrastrá el pin hasta tu casa.`;
+    $("pinOk").addEventListener("click", () => { const p = pick.marker.getLatLng(); setPin(p.lat, p.lng); });
+    return;
+  }
   pick.url = `https://www.google.com/maps?q=${pos[0]},${pos[1]}`;
-  const hint = $("mapHint"); hint.className = "map-hint ok"; hint.textContent = "✅ Ubicación marcada. Si no es exacta, arrastrá el pin.";
+  hint.className = "map-hint ok"; hint.textContent = "✅ Ubicación marcada. Si no es exacta, arrastrá el pin.";
 }
+
+// Con ciudad y dirección escritas, el mapa va a la zona aproximada (OpenStreetMap Nominatim).
+let geoTimer = null;
+function scheduleGeocode() { clearTimeout(geoTimer); geoTimer = setTimeout(geocode, 1000); }
+async function geocode() {
+  if (pick.url) return;  // ya marcó su ubicación: no se la movemos
+  const city = $("fCity").value.trim(), addr = $("fAddr").value.trim(), dept = $("fDept").value;
+  if (city.length < 3) return;
+  const region = ["Asunción", "Central"].includes(dept) ? dept : "";
+  const tries = [[addr, city, region], [city, region]].map(p => p.filter(Boolean).concat("Paraguay").join(", "));
+  if (addr.length < 4) tries.shift();
+  for (const [i, q] of tries.entries()) {
+    if (q === pick.lastQuery) return;
+    try {
+      const r = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=py&accept-language=es&q=${encodeURIComponent(q)}`);
+      const hit = (await r.json())[0];
+      if (!hit) continue;
+      pick.lastQuery = q;
+      await initMap();
+      if (window.L && pick.map && !pick.url) setPin(+hit.lat, +hit.lon, i === 0 && addr.length >= 4 ? 17 : 14, true);
+      return;
+    } catch { return; }
+  }
+}
+["fCity", "fAddr"].forEach(id => $(id).addEventListener("input", scheduleGeocode));
+$("fDept").addEventListener("change", scheduleGeocode);
 async function initMap() {
   try { await loadLeaflet(); } catch { $("mapHint").textContent = "No se pudo cargar el mapa. Podés seguir sin marcar la ubicación."; return; }
   if (pick.map) { pick.map.invalidateSize(); return; }
@@ -819,7 +860,7 @@ $("orderForm").addEventListener("submit", async e => {
     $("orderForm").hidden = true; $("checkoutDone").hidden = false;
     $("orderForm").reset(); renderOffers();
     if (pick.marker) { pick.marker.remove(); pick.marker = null; }
-    pick.url = ""; $("mapHint").className = "map-hint"; $("mapHint").textContent = "O tocá el mapa donde está tu casa. Podés arrastrar el pin.";
+    pick.url = ""; pick.lastQuery = ""; $("mapHint").className = "map-hint"; $("mapHint").textContent = "O tocá el mapa donde está tu casa. Podés arrastrar el pin.";
     // En el celular se abre WhatsApp solo; el botón queda por si el navegador no lo abre.
     if (orderId && matchMedia("(pointer:coarse)").matches) setTimeout(() => { location.href = waUrl; }, 1500);
   } catch (err) {
