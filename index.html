@@ -94,6 +94,7 @@ section{padding:40px 0}
 .offer[data-checked="true"]{border-color:var(--brand);background:#fff6ef}
 .offer__body{flex:1;min-width:0}
 .offer__title{font-weight:700;font-size:15px}
+.offer__sub{font-size:12px;color:var(--muted)}
 .offer__save{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--ok);border-radius:6px;padding:2px 8px;margin-top:4px}
 .offer__prices{text-align:right}
 .offer__prices b{display:block;font-size:16px}
@@ -134,8 +135,25 @@ section{padding:40px 0}
 .checkout__close{border:0;background:#f3f1f4;width:34px;height:34px;border-radius:50%;font-size:20px;line-height:1;cursor:pointer;color:var(--text)}
 .checkout .cod{border:0;border-radius:0;padding:16px}
 .checkout .offers{margin-bottom:14px}
-.summary{display:flex;justify-content:space-between;align-items:center;background:#fff6ef;border-radius:10px;padding:12px 14px;margin:4px 0 12px;font-size:14px}
-.summary b{font-size:18px;color:var(--brand-dark)}
+.order-sum{border:1px solid var(--line);border-radius:12px;background:#fffaf6;padding:12px 14px;margin:6px 0 14px}
+.order-sum h4{font-size:14px;margin-bottom:10px}
+.order-sum__item{display:flex;gap:10px;align-items:center;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+.order-sum__item img{width:52px;height:52px;object-fit:cover;border-radius:8px;flex:none;background:#fff}
+.order-sum__item div{flex:1;min-width:0;display:flex;flex-direction:column;font-size:13px;color:var(--muted)}
+.order-sum__item div b{color:var(--text);font-size:14px}
+.order-sum dl{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding-top:10px;font-size:13px}
+.order-sum dt{color:var(--muted)}
+.order-sum dd{text-align:right;font-weight:600}
+.order-sum .free,.order-sum dd.sum-save{color:var(--ok)}
+.order-sum .total{font-size:17px;font-weight:800;color:var(--text);padding-top:6px;border-top:1px solid var(--line)}
+.order-sum dd.total{color:var(--brand-dark)}
+.map-field small{font-weight:400;color:var(--muted)}
+.geo-btn{width:100%;border:1.5px solid var(--brand);background:#fff6ef;color:var(--brand-dark);font:inherit;font-weight:700;font-size:14px;border-radius:10px;padding:11px;cursor:pointer;margin-bottom:8px}
+.geo-btn:disabled{opacity:.6;cursor:wait}
+.pick-map{height:220px;border-radius:10px;border:1px solid #d8d6de;overflow:hidden;background:#eef0f2;z-index:0}
+.map-hint{font-size:12px;color:var(--muted);margin-top:5px}
+.map-hint.ok{color:var(--ok);font-weight:600}
+.map-hint.bad{color:#c0233b}
 .done{padding:22px 16px 20px}
 .done__top{text-align:center;margin-bottom:16px}
 .done__check{width:58px;height:58px;margin:0 auto 10px;border-radius:50%;background:var(--ok);color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 8px #e7f6dc;animation:pop .45s ease-out}
@@ -317,11 +335,24 @@ footer .legal{border-top:1px solid #4a4558;margin-top:24px;padding-top:16px;font
         <div class="field"><label for="fDept">Departamento</label><select id="fDept" name="department" required></select><div class="err">Elegí tu departamento.</div></div>
         <div class="field"><label for="fCity">Ciudad</label><input id="fCity" name="city" autocomplete="address-level2" placeholder="Ej: San Lorenzo" required><div class="err">Escribí tu ciudad.</div></div>
         <div class="field"><label for="fAddr">Dirección</label><input id="fAddr" name="address" autocomplete="street-address" placeholder="Calle, número" required><div class="err">Escribí tu dirección.</div></div>
-        <div class="field"><label for="fRef">Referencia</label><input id="fRef" name="reference" placeholder="Ej: casa amarilla con portón verde"></div>
-        <div class="field"><label for="fMaps">Link de Google Maps (recomendado)</label><input id="fMaps" name="maps" type="url" inputmode="url" placeholder="https://maps.app.goo.gl/..."></div>
+        <div class="field map-field">
+          <label>📍 Ubicación de entrega <small>(así el delivery llega directo)</small></label>
+          <button type="button" class="geo-btn" id="geoBtn">📍 Usar mi ubicación actual</button>
+          <div class="pick-map" id="pickMap" aria-label="Mapa para marcar la ubicación de entrega"></div>
+          <p class="map-hint" id="mapHint">O tocá el mapa donde está tu casa. Podés arrastrar el pin.</p>
+        </div>
         <div class="hp" aria-hidden="true"><label>No completar <input id="fWebsite" tabindex="-1" autocomplete="off"></label></div>
-        <label class="check"><input type="checkbox" id="fConfirm" required><span>Confirmo que mis datos son correctos y que voy a estar disponible para recibir y pagar mi pedido.</span></label>
-        <div class="summary"><span id="sumLabel"></span><b id="sumTotal"></b></div>
+        <div class="order-sum">
+          <h4>🧾 Resumen del pedido</h4>
+          <div class="order-sum__item"><img id="sumImg" alt="Articumina"><div><b>Articumina</b><span id="sumOffer"></span><span id="sumSub2"></span></div><b id="sumPrice"></b></div>
+          <dl>
+            <dt>Subtotal</dt><dd id="sumSubtotal"></dd>
+            <dt class="sum-save">Ahorro del combo</dt><dd class="sum-save" id="sumSave"></dd>
+            <dt>Envío</dt><dd class="free">Gratis</dd>
+            <dt>Pago</dt><dd>Al recibir</dd>
+            <dt class="total">Total</dt><dd class="total" id="sumTotal"></dd>
+          </dl>
+        </div>
         <button class="cta" id="ctaBtn" type="submit">Confirmar pedido</button>
         <div class="trust"><span>💵 Pagás al recibir</span><span>🔒 Tus datos solo se usan para la entrega</span></div>
         <div class="form-msg" id="formMsg" role="status" aria-live="polite"></div>
@@ -464,9 +495,9 @@ const CONFIG = {
 
   /* Precios del catálogo. compare = el mismo frasco comprado suelto (ahorro real del combo). */
   offers: [
-    { id: "1u", title: "1 frasco (30 días)",  qty: 1, price: 159000 },
-    { id: "2u", title: "2 frascos (60 días)", qty: 2, price: 259000, compare: 318000, tag: "⭐ EL MÁS ELEGIDO", default: true },
-    { id: "3u", title: "3 frascos (90 días)", qty: 3, price: 320000, compare: 477000, tag: "🔥 MEJOR PRECIO" }
+    { id: "1u", title: "1 frasco · 60 cápsulas",   sub: "Rinde 30 días",  qty: 1, price: 159000 },
+    { id: "2u", title: "2 frascos · 120 cápsulas", sub: "Rinde 60 días",  qty: 2, price: 259000, compare: 318000, tag: "⭐ EL MÁS ELEGIDO", default: true },
+    { id: "3u", title: "3 frascos · 180 cápsulas", sub: "Rinde 90 días",  qty: 3, price: 320000, compare: 477000, tag: "🔥 MEJOR PRECIO" }
   ],
 
   countdownMinutes: 0,   // sin contador: no hay una oferta que venza
@@ -609,7 +640,7 @@ function renderOffers() {
     <label class="offer" data-checked="${o.id === selected.id}">
       ${o.tag ? `<span class="offer__tag">${esc(o.tag)}</span>` : ""}
       <input type="radio" name="${box}" value="${o.id}" ${o.id === selected.id ? "checked" : ""}>
-      <div class="offer__body"><div class="offer__title">${esc(o.title)}</div>${pct(o) ? `<span class="offer__save">Ahorrá ${pct(o)}%</span>` : ""}</div>
+      <div class="offer__body"><div class="offer__title">${esc(o.title)}</div>${o.sub ? `<div class="offer__sub">${esc(o.sub)}</div>` : ""}${pct(o) ? `<span class="offer__save">Ahorrá ${pct(o)}%</span>` : ""}</div>
       <div class="offer__prices"><b>${money(o.price)}</b>${o.compare ? `<s>${money(o.compare)}</s>` : ""}</div>
     </label>`).join("");
     $(box).querySelectorAll("input").forEach(inp => inp.addEventListener("change", () => {
@@ -623,7 +654,14 @@ function updatePrice() {
   $("priceSave").textContent = pct(selected) ? `Ahorrá ${pct(selected)}%` : "";
   $("priceSave").hidden = !pct(selected);
   $("buyBtn").textContent = `Comprar ahora – ${money(selected.price)}`;
-  $("sumLabel").textContent = `Total · ${selected.title}`;
+  const subtotal = selected.compare || selected.price;
+  $("sumImg").src = P.images[0];
+  $("sumOffer").textContent = selected.title;
+  $("sumSub2").textContent = selected.sub || "";
+  $("sumPrice").textContent = money(selected.price);
+  $("sumSubtotal").textContent = money(subtotal);
+  $("sumSave").textContent = "– " + money(subtotal - selected.price);
+  document.querySelectorAll(".sum-save").forEach(el => el.hidden = subtotal === selected.price);
   $("sumTotal").textContent = money(selected.price);
   $("ctaBtn").textContent = `Confirmar pedido – ${money(selected.price)}`;
 }
@@ -657,9 +695,56 @@ function validate() {
     f.classList.toggle("invalid", !good);
     if (!good && ok) { $(id).focus(); ok = false; }
   }
-  if (ok && !$("fConfirm").checked) { $("fConfirm").focus(); msg("Marcá la casilla de confirmación.", false); return false; }
   return ok;
 }
+
+/* --- Mapa de entrega (Leaflet + OpenStreetMap, se carga al abrir el checkout) --- */
+const pick = { map: null, marker: null, url: "", loading: null };
+function loadLeaflet() {
+  if (window.L) return Promise.resolve();
+  if (pick.loading) return pick.loading;
+  pick.loading = new Promise((ok, fail) => {
+    const css = document.createElement("link");
+    css.rel = "stylesheet"; css.href = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css";
+    document.head.appendChild(css);
+    const js = document.createElement("script");
+    js.src = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";
+    js.onload = ok; js.onerror = fail;
+    document.head.appendChild(js);
+  });
+  return pick.loading;
+}
+function setPin(lat, lng, zoom) {
+  const pos = [+lat.toFixed(6), +lng.toFixed(6)];
+  if (!pick.marker) {
+    pick.marker = L.marker(pos, { draggable: true }).addTo(pick.map);
+    pick.marker.on("dragend", () => { const p = pick.marker.getLatLng(); setPin(p.lat, p.lng); });
+  } else pick.marker.setLatLng(pos);
+  if (zoom) pick.map.setView(pos, zoom);
+  pick.url = `https://www.google.com/maps?q=${pos[0]},${pos[1]}`;
+  const hint = $("mapHint"); hint.className = "map-hint ok"; hint.textContent = "✅ Ubicación marcada. Si no es exacta, arrastrá el pin.";
+}
+async function initMap() {
+  try { await loadLeaflet(); } catch { $("mapHint").textContent = "No se pudo cargar el mapa. Podés seguir sin marcar la ubicación."; return; }
+  if (pick.map) { pick.map.invalidateSize(); return; }
+  pick.map = L.map("pickMap", { zoomControl: true, attributionControl: true }).setView([-25.2867, -57.647], 12);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(pick.map);
+  pick.map.on("click", e => setPin(e.latlng.lat, e.latlng.lng));
+  setTimeout(() => pick.map.invalidateSize(), 200);
+}
+$("geoBtn").addEventListener("click", () => {
+  const hint = $("mapHint"), btn = $("geoBtn");
+  if (!navigator.geolocation) { hint.className = "map-hint bad"; hint.textContent = "Tu teléfono no comparte la ubicación: tocá el mapa donde está tu casa."; return; }
+  btn.disabled = true; btn.textContent = "Buscando tu ubicación…";
+  navigator.geolocation.getCurrentPosition(async p => {
+    await initMap();
+    if (window.L && pick.map) setPin(p.coords.latitude, p.coords.longitude, 17);
+    btn.disabled = false; btn.textContent = "📍 Usar mi ubicación actual";
+  }, () => {
+    hint.className = "map-hint bad"; hint.textContent = "No pudimos obtener tu ubicación. Tocá el mapa donde está tu casa.";
+    btn.disabled = false; btn.textContent = "📍 Usar mi ubicación actual";
+  }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 });
+});
 function msg(t, good) { const m = $("formMsg"); m.textContent = t; m.className = "form-msg " + (good ? "ok" : "bad"); }
 // Celular paraguayo como 09XXXXXXXX, o "" si no es válido.
 function localPhone(v) {
@@ -673,7 +758,7 @@ const cookie = n => (document.cookie.match(new RegExp("(?:^|; )" + n + "=([^;]*)
 function whatsappLink(order) {
   const lines = [`Hola! Quiero hacer un pedido:`, `🛍️ ${order.product}`, `📦 ${order.offer} – ${money(order.total)}`,
     `👤 ${order.name}`, `📞 ${order.phone}`, `📍 ${order.address}, ${order.city}, ${order.department}`,
-    order.reference && `🏠 Ref: ${order.reference}`, order.maps && `🗺️ ${order.maps}`, `💵 Pago contra entrega`].filter(Boolean);
+    order.maps && `🗺️ ${order.maps}`, `💵 Pago contra entrega`].filter(Boolean);
   return `https://wa.me/${CONFIG.order.whatsapp}?text=${encodeURIComponent(lines.join("\n"))}`;
 }
 
@@ -685,8 +770,8 @@ $("orderForm").addEventListener("submit", async e => {
   const order = {
     product: P.name, offer: selected.title, quantity: selected.qty, total: selected.price,
     name: $("fName").value.trim(), phone: localPhone($("fPhone").value), department: $("fDept").value,
-    city: $("fCity").value.trim(), address: $("fAddr").value.trim(), reference: $("fRef").value.trim(),
-    maps: $("fMaps").value.trim(), page: location.href
+    city: $("fCity").value.trim(), address: $("fAddr").value.trim(),
+    maps: pick.url, page: location.href
   };
   const btn = $("ctaBtn"); btn.disabled = true;
   try {
@@ -696,7 +781,7 @@ $("orderForm").addEventListener("submit", async e => {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           cantidad: order.quantity, nombre: order.name, telefono: order.phone, departamento: order.department,
-          ciudad: order.city, direccion: order.address, referencia: order.reference, ubicacion_maps: order.maps,
+          ciudad: order.city, direccion: order.address, ubicacion_maps: order.maps,
           website: $("fWebsite").value, landing_url: order.page, user_agent: navigator.userAgent,
           utm_source: utm.get("utm_source") || "", utm_medium: utm.get("utm_medium") || "",
           utm_campaign: utm.get("utm_campaign") || "", fbclid: utm.get("fbclid") || "",
@@ -733,6 +818,8 @@ $("orderForm").addEventListener("submit", async e => {
     dlg.scrollTop = 0;
     $("orderForm").hidden = true; $("checkoutDone").hidden = false;
     $("orderForm").reset(); renderOffers();
+    if (pick.marker) { pick.marker.remove(); pick.marker = null; }
+    pick.url = ""; $("mapHint").className = "map-hint"; $("mapHint").textContent = "O tocá el mapa donde está tu casa. Podés arrastrar el pin.";
     // En el celular se abre WhatsApp solo; el botón queda por si el navegador no lo abre.
     if (orderId && matchMedia("(pointer:coarse)").matches) setTimeout(() => { location.href = waUrl; }, 1500);
   } catch (err) {
@@ -814,6 +901,7 @@ function openCheckout() {
   $("orderForm").hidden = false; $("checkoutDone").hidden = true; $("formMsg").className = "form-msg";
   if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
   document.body.style.overflow = "hidden";
+  initMap();
   if (window.fbq) fbq("track", "InitiateCheckout", { value: selected.price, currency: "PYG" });
 }
 const closeCheckout = () => dlg.close ? dlg.close() : dlg.removeAttribute("open");
