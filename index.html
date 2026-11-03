@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Articumina</title>
+<meta name="description" content="Articumina: suplemento alimentario 9 en 1 con curcumina y colágeno tipo II. Envío gratis en Asunción y Central, pagás al recibir.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<!--
+  PLANTILLA DE LANDING (estructura analizada de una página de referencia)
+  ------------------------------------------------------------------------
+  Todo lo que cambia por producto está en el objeto CONFIG (más abajo, en <script>).
+  Imágenes: poné tus archivos en ./img/ con los nombres de CONFIG (ver img/LEEME.txt).
+  Si falta una imagen se muestra un recuadro gris con la medida recomendada.
+-->
+<style>
+:root{
+  --brand:#ef6a1a;        /* naranja Articumina: ticker, acentos, precios */
+  --brand-soft:#fde4d2;   /* naranja suave: fondos de sección */
+  --brand-dark:#c24f0c;
+  --cta:#1faa59;          /* verde WhatsApp: botón de compra */
+  --ok:#53af01;           /* tildes verdes */
+  --star:#ffcc00;
+  --text:#121212;
+  --muted:#5b5b66;
+  --bg:#ffffff;
+  --card:#ffffff;
+  --line:#ececf1;
+  --radius:12px;
+  --gallery-ratio:4/5;   /* 4/5 si tus fotos son verticales */
+  --maxw:1100px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Poppins,system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px}
+h2{font-size:clamp(22px,5vw,30px);font-weight:700;line-height:1.2;text-align:center}
+.lead{color:var(--muted);text-align:center;max-width:640px;margin:10px auto 0}
+.on-brand h2{color:#3b1d0a}
+.on-brand .lead{color:#6b3a1a}
+section{padding:40px 0}
+.divider{height:30px}
+
+/* ---------- Ticker ---------- */
+.ticker{background:var(--brand);color:#fff;overflow:hidden;white-space:nowrap;height:40px;display:flex;align-items:center;font-size:13px;font-weight:600;letter-spacing:.3px}
+.ticker.soft{background:#1f1a17}
+.ticker__track{display:inline-flex;gap:40px;padding-left:100%;animation:tick 28s linear infinite}
+.ticker:hover .ticker__track{animation-play-state:paused}
+@keyframes tick{to{transform:translateX(-100%)}}
+@media (prefers-reduced-motion:reduce){.ticker__track{animation:none;padding-left:16px}}
+
+/* ---------- Imagen placeholder ---------- */
+.ph{background:#f1eef3;color:#8b8796;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;font-weight:500;aspect-ratio:1/1;width:100%}
+
+/* ---------- Hero / producto ---------- */
+.hero{padding:20px 0 30px}
+.hero__grid{display:grid;gap:28px}
+@media (min-width:900px){.hero__grid{grid-template-columns:1.05fr 1fr;align-items:start}.gallery{position:sticky;top:16px}}
+.gallery__main{position:relative;border-radius:var(--radius);overflow:hidden;background:#faf7f9}
+.gallery__main img,.gallery__main .ph{aspect-ratio:var(--gallery-ratio);object-fit:cover;width:100%}
+.gallery__badges{position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:6px}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;color:#fff;background:var(--brand)}
+.badge.dark{background:#2e2a39}
+.gallery__thumbs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:10px}
+.gallery__thumbs button{border:2px solid transparent;border-radius:8px;overflow:hidden;padding:0;background:none;cursor:pointer}
+.gallery__thumbs button[aria-current="true"]{border-color:var(--brand)}
+.gallery__thumbs img,.gallery__thumbs .ph{aspect-ratio:var(--gallery-ratio);object-fit:cover;font-size:0}
+.viewers{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-bottom:8px}
+.viewers b{color:var(--text)}
+.dot{width:8px;height:8px;border-radius:50%;background:#e0245e;box-shadow:0 0 0 0 rgba(224,36,94,.6);animation:pulse 1.6s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(224,36,94,0)}100%{box-shadow:0 0 0 0 rgba(224,36,94,0)}}
+.title{font-size:clamp(24px,5.5vw,32px);font-weight:700;line-height:1.2}
+.proof{display:flex;align-items:center;gap:8px;margin:8px 0 14px;font-size:14px;color:var(--muted)}
+.stars{color:var(--star);letter-spacing:1px}
+.chips{display:grid;gap:8px;margin-bottom:16px}
+.chip{display:flex;gap:12px;align-items:center;background:#fff3ea;border-radius:10px;padding:10px 12px}
+.chip__ico{font-size:22px;width:32px;text-align:center}
+.chip b{display:block;font-size:14px}
+.chip span{font-size:13px;color:var(--muted)}
+.price{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.price__now{font-size:28px;font-weight:800;color:var(--brand)}
+.price__old{font-size:17px;color:#9a97a3;text-decoration:line-through}
+.price__save{background:#2e2a39;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px}
+.countdown{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#2e2a39;color:#fff;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:13px;font-weight:600}
+.countdown__time{font-variant-numeric:tabular-nums;font-size:20px;font-weight:800;letter-spacing:1px}
+
+/* ---------- Ofertas (combos) ---------- */
+.offers{display:grid;gap:10px;margin-bottom:16px}
+.offer{position:relative;display:flex;align-items:center;gap:12px;border:2px solid var(--line);border-radius:12px;padding:14px 12px;cursor:pointer;background:#fff;transition:border-color .15s,background .15s}
+.offer input{accent-color:var(--brand);width:18px;height:18px;flex:none}
+.offer[data-checked="true"]{border-color:var(--brand);background:#fff6ef}
+.offer__body{flex:1;min-width:0}
+.offer__title{font-weight:700;font-size:15px}
+.offer__save{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--ok);border-radius:6px;padding:2px 8px;margin-top:4px}
+.offer__prices{text-align:right}
+.offer__prices b{display:block;font-size:16px}
+.offer__prices s{font-size:13px;color:#9a97a3}
+.offer__tag{position:absolute;top:-11px;right:12px;font-size:11px;font-weight:700;background:var(--brand);color:#fff;border-radius:999px;padding:2px 10px}
+
+/* ---------- Formulario contra entrega ---------- */
+.cod{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+.cod h3{font-size:16px;text-align:center;margin-bottom:12px}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+.field input,.field select{width:100%;font:inherit;font-size:15px;padding:12px;border:1px solid #d8d6de;border-radius:10px;background:#fff;color:var(--text)}
+.field input:focus,.field select:focus{outline:2px solid var(--brand-soft);border-color:var(--brand)}
+.field .err{display:none;color:#c0233b;font-size:12px;margin-top:3px}
+.field.invalid .err{display:block}
+.field.invalid input,.field.invalid select{border-color:#c0233b}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:13px;margin:6px 0 14px}
+.check input{margin-top:3px;accent-color:var(--brand);width:18px;height:18px;flex:none}
+.cta{display:block;width:100%;border:0;cursor:pointer;font:inherit;font-size:17px;font-weight:800;color:#fff;background:var(--cta);border-radius:10px;padding:16px 12px;text-transform:uppercase;letter-spacing:.3px;animation:shake 4s ease-in-out infinite}
+.cta:disabled{opacity:.6;cursor:wait;animation:none}
+@keyframes shake{0%,90%,100%{transform:none}92%{transform:translateX(-3px)}94%{transform:translateX(3px)}96%{transform:translateX(-2px)}98%{transform:translateX(2px)}}
+@media (prefers-reduced-motion:reduce){.cta{animation:none}}
+.trust{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--muted);margin-top:12px}
+.form-msg{display:none;text-align:center;font-weight:600;padding:14px;border-radius:10px;margin-top:12px}
+.form-msg.ok{display:block;background:#eaf7df;color:#2f6b00}
+.form-msg.bad{display:block;background:#fde8ec;color:#a0172f}
+.form-msg a{color:inherit;font-weight:800}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* ---------- Checkout (ventana) ---------- */
+.buy{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+.buy .cta{margin-top:14px}
+.checkout{border:0;padding:0;margin:auto;width:min(520px,100%);max-height:100dvh;border-radius:16px;background:#fff;color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.checkout::backdrop{background:rgba(20,16,14,.6)}
+@media (max-width:560px){.checkout{margin:auto 0 0;max-width:100%;border-radius:16px 16px 0 0;max-height:94dvh}}
+.checkout__head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;background:#fff;border-bottom:1px solid var(--line)}
+.checkout__head h2{font-size:17px}
+.checkout__close{border:0;background:#f3f1f4;width:34px;height:34px;border-radius:50%;font-size:20px;line-height:1;cursor:pointer;color:var(--text)}
+.checkout .cod{border:0;border-radius:0;padding:16px}
+.checkout .offers{margin-bottom:14px}
+.summary{display:flex;justify-content:space-between;align-items:center;background:#fff6ef;border-radius:10px;padding:12px 14px;margin:4px 0 12px;font-size:14px}
+.summary b{font-size:18px;color:var(--brand-dark)}
+.done{text-align:center;padding:28px 18px 24px}
+.done__icon{font-size:46px}
+.done h3{font-size:20px;margin:8px 0}
+.done p{color:var(--muted);margin-bottom:8px}
+.done .order-id{display:inline-block;background:#fff6ef;color:var(--brand-dark);font-weight:800;border-radius:8px;padding:6px 12px;margin:6px 0 14px}
+
+/* ---------- Mini testimonios del hero ---------- */
+.mini-revs{margin-top:22px}
+.mini-revs__head{text-align:center;font-size:14px;font-weight:600;margin-bottom:10px}
+.mini-revs__head span{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.hscroll{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
+.hscroll::-webkit-scrollbar{height:4px}.hscroll::-webkit-scrollbar-thumb{background:var(--brand-soft);border-radius:4px}
+.mini-rev{flex:0 0 78%;max-width:260px;scroll-snap-align:start;border:1px solid var(--line);border-radius:12px;padding:12px;font-size:13px;background:#fff}
+.mini-rev b{font-size:13px}.mini-rev .ver{color:var(--ok);font-weight:700}
+
+/* ---------- Banners de imagen (pares) ---------- */
+.banner{display:grid;grid-template-columns:1fr;gap:0}
+@media (min-width:768px){.banner{grid-template-columns:1fr 1fr}}
+.banner img,.banner .ph{width:100%;aspect-ratio:4/5;object-fit:cover}
+.banner .only-desktop{display:none}
+@media (min-width:768px){.banner .only-desktop{display:block}}
+
+/* ---------- Dolores ---------- */
+.pain__kicker{display:block;text-align:center;font-size:12px;font-weight:800;letter-spacing:1.5px;color:var(--brand);margin-bottom:6px}
+.pain h2{font-weight:900;font-size:clamp(20px,5vw,28px)}
+.pain__list{display:grid;gap:12px;margin-top:22px;max-width:640px;margin-inline:auto}
+@media (min-width:768px){.pain__list{grid-template-columns:repeat(3,1fr);max-width:none}}
+.pain__item{display:flex;gap:12px;align-items:center;background:#fff3ea;border-left:4px solid var(--brand);border-radius:10px;padding:16px}
+.pain__item i{font-style:normal;font-size:26px}
+.pain__item p{font-weight:600;font-size:14px}
+
+/* ---------- Pestañas ---------- */
+.tabs__bar{display:flex;gap:8px;overflow-x:auto;margin:20px 0 18px;padding-bottom:4px;justify-content:flex-start}
+@media (min-width:768px){.tabs__bar{justify-content:center}}
+.tabs__bar button{flex:none;font:inherit;font-size:13px;font-weight:600;border:1px solid var(--brand-soft);background:#fff;color:var(--text);padding:9px 14px;border-radius:999px;cursor:pointer}
+.tabs__bar button[aria-selected="true"]{background:var(--brand);border-color:var(--brand);color:#fff}
+.tabs__panel{max-width:720px;margin:0 auto;text-align:center}
+.tabs__panel h3{font-size:18px;margin-bottom:14px}
+.tabs__panel ul{list-style:none;display:grid;gap:8px;margin:0 auto 14px;max-width:420px;text-align:left}
+.tabs__panel li{background:#fff3ea;border-radius:10px;padding:10px 14px;font-weight:500}
+.tabs__panel p{color:var(--muted)}
+
+/* ---------- Comparativa ---------- */
+.on-brand{background:var(--brand-soft)}
+.cmp{max-width:640px;margin:22px auto 0;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 30px rgba(150,70,20,.12)}
+.cmp table{width:100%;border-collapse:collapse;font-size:14px}
+.cmp th{padding:14px 8px;font-size:14px}
+.cmp th:nth-child(2){background:var(--brand);color:#fff}
+.cmp td{padding:13px 10px;border-top:1px solid var(--line)}
+.cmp td:nth-child(n+2){text-align:center;width:80px;font-size:18px}
+.cmp td:nth-child(2){background:#fff6ef}
+.yes{color:var(--ok);font-weight:900}.no{color:#b8b6bf;font-weight:900}
+
+/* ---------- Resultados ---------- */
+.stats{display:grid;gap:12px;margin-top:22px;grid-template-columns:1fr 1fr}
+@media (min-width:768px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:#fff;border-radius:14px;padding:18px 14px;text-align:center}
+.stat b{display:block;font-size:34px;font-weight:800;color:var(--brand)}
+.stat p{font-size:13px;color:var(--muted)}
+.stats-note{font-size:12px;color:#6b3a1a;text-align:center;margin-top:14px}
+
+/* ---------- Reseñas ---------- */
+.revs__summary{display:grid;gap:18px;align-items:center;max-width:720px;margin:20px auto 22px}
+@media (min-width:640px){.revs__summary{grid-template-columns:auto 1fr}}
+.revs__score{text-align:center}
+.revs__score b{font-size:44px;font-weight:800;line-height:1}
+.bars{display:grid;gap:6px;font-size:13px}
+.bar{display:grid;grid-template-columns:62px 1fr 34px;gap:8px;align-items:center}
+.bar div{height:8px;background:var(--line);border-radius:6px;overflow:hidden}
+.bar div i{display:block;height:100%;background:var(--star)}
+.revs__grid{columns:1;column-gap:12px}
+@media (min-width:640px){.revs__grid{columns:2}}
+@media (min-width:960px){.revs__grid{columns:3}}
+.rev{break-inside:avoid;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;background:#fff}
+.rev__head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--brand-soft);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none}
+.rev__meta{font-size:12px;color:var(--muted)}
+.rev__meta .ver{color:var(--ok);font-weight:600}
+.rev img{border-radius:8px;margin-top:8px}
+
+/* ---------- Footer ---------- */
+footer{background:#2e2a39;color:#e9e6ef;padding:36px 0 90px;font-size:14px}
+footer .cols{display:grid;gap:22px}
+@media (min-width:768px){footer .cols{grid-template-columns:repeat(3,1fr)}}
+footer h4{color:#fff;margin-bottom:8px}
+footer a{color:#e9e6ef;text-decoration:none}
+footer a:hover{text-decoration:underline}
+footer .legal{border-top:1px solid #4a4558;margin-top:24px;padding-top:16px;font-size:12px;color:#b6b2c2;display:flex;flex-wrap:wrap;gap:12px}
+.disclaimer{font-size:12px;color:#b6b2c2;margin-top:12px}
+
+/* ---------- Flotantes ---------- */
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);box-shadow:0 -6px 20px rgba(0,0,0,.08);transform:translateY(110%);transition:transform .25s}
+.sticky-cta.show{transform:none}
+.sticky-cta .cta{padding:14px;font-size:15px}
+.toast{position:fixed;left:12px;bottom:84px;z-index:45;display:flex;gap:10px;align-items:center;max-width:300px;background:#fff;border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.15);padding:10px 14px;font-size:13px;transform:translateX(calc(-100% - 24px));visibility:hidden;transition:transform .35s,visibility .35s}
+.toast.show{transform:none;visibility:visible}
+.to-top{position:fixed;right:14px;bottom:84px;z-index:41;width:40px;height:40px;border-radius:50%;border:0;background:var(--brand);color:#fff;font-size:18px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s}
+.to-top.show{opacity:1;pointer-events:auto}
+</style>
+</head>
+<body>
+
+<!-- 1. Ticker superior -->
+<div class="ticker" id="ticker1" aria-label="Beneficios de compra"></div>
+
+<!-- 2. Hero / ficha de producto + formulario -->
+<section class="hero">
+  <div class="wrap hero__grid">
+    <div class="gallery">
+      <div class="gallery__main" id="galleryMain">
+        <div class="gallery__badges" id="badges"></div>
+      </div>
+      <div class="gallery__thumbs" id="thumbs"></div>
+    </div>
+
+    <div>
+      <div class="viewers" id="viewers"><span class="dot"></span><span><b id="viewersN">12</b> personas viendo este producto</span></div>
+      <h1 class="title" id="pTitle"></h1>
+      <div class="proof"><span class="stars" id="pStars">★★★★★</span><span id="pProof"></span></div>
+      <div class="chips" id="chips"></div>
+
+      <div class="price">
+        <span class="price__now" id="priceNow"></span>
+        <span class="price__old" id="priceOld"></span>
+        <span class="price__save" id="priceSave"></span>
+      </div>
+
+      <div class="countdown" id="countdown">
+        <span>⏳ LA OFERTA TERMINA EN</span>
+        <span class="countdown__time" id="cdTime">--:--</span>
+      </div>
+
+      <div class="buy" id="buyBox">
+        <div class="offers" id="offers" role="radiogroup" aria-label="Elegí tu oferta"></div>
+        <button class="cta" id="buyBtn" type="button">Comprar ahora – pago al recibir</button>
+        <div class="trust"><span>🚚 Envío gratis en Asunción y Central</span><span>💵 Pagás al recibir</span><span>🔒 Compra segura</span></div>
+      </div>
+
+      <div class="mini-revs">
+        <div class="mini-revs__head" id="miniHead"></div>
+        <div class="hscroll" id="miniRevs"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Checkout: se abre al tocar cualquier botón de compra -->
+<dialog class="checkout" id="checkout" aria-labelledby="checkoutTitle">
+  <div class="checkout__head"><h2 id="checkoutTitle">🛒 Finalizá tu pedido</h2><button class="checkout__close" type="button" id="checkoutClose" aria-label="Cerrar">×</button></div>
+      <form class="cod" id="orderForm" novalidate>
+        <div class="offers" id="offersModal" role="radiogroup" aria-label="Elegí tu oferta"></div>
+
+        <h3>🚚 Completá tus datos y pagá al recibir</h3>
+        <div class="field"><label for="fName">Nombre y apellido</label><input id="fName" name="name" autocomplete="name" placeholder="Ej: Ana López" required><div class="err">Escribí tu nombre.</div></div>
+        <div class="field"><label for="fPhone">Teléfono / WhatsApp</label><input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Ej: 0981 234 567" required><div class="err">Escribí un número válido.</div></div>
+        <div class="field"><label for="fDept">Departamento</label><select id="fDept" name="department" required></select><div class="err">Elegí tu departamento.</div></div>
+        <div class="field"><label for="fCity">Ciudad</label><input id="fCity" name="city" autocomplete="address-level2" placeholder="Ej: San Lorenzo" required><div class="err">Escribí tu ciudad.</div></div>
+        <div class="field"><label for="fAddr">Dirección</label><input id="fAddr" name="address" autocomplete="street-address" placeholder="Calle, número" required><div class="err">Escribí tu dirección.</div></div>
+        <div class="field"><label for="fRef">Referencia</label><input id="fRef" name="reference" placeholder="Ej: casa amarilla con portón verde"></div>
+        <div class="field"><label for="fMaps">Link de Google Maps (recomendado)</label><input id="fMaps" name="maps" type="url" inputmode="url" placeholder="https://maps.app.goo.gl/..."></div>
+        <div class="hp" aria-hidden="true"><label>No completar <input id="fWebsite" tabindex="-1" autocomplete="off"></label></div>
+        <label class="check"><input type="checkbox" id="fConfirm" required><span>Confirmo que mis datos son correctos y que voy a estar disponible para recibir y pagar mi pedido.</span></label>
+        <div class="summary"><span id="sumLabel"></span><b id="sumTotal"></b></div>
+        <button class="cta" id="ctaBtn" type="submit">Confirmar pedido</button>
+        <div class="trust"><span>💵 Pagás al recibir</span><span>🔒 Tus datos solo se usan para la entrega</span></div>
+        <div class="form-msg" id="formMsg" role="status" aria-live="polite"></div>
+      </form>
+  <div class="done" id="checkoutDone" hidden>
+    <div class="done__icon">✅</div>
+    <h3>¡Pedido recibido!</h3>
+    <p id="doneText"></p>
+    <span class="order-id" id="doneId"></span>
+    <p>Te vamos a escribir por WhatsApp para coordinar la entrega.</p>
+    <button class="cta" type="button" id="doneClose">Listo</button>
+  </div>
+</dialog>
+
+<div class="divider"></div>
+<!-- 3. Banner de imágenes #1 -->
+<div class="banner" data-banner="0"></div>
+<div class="divider"></div>
+
+<!-- 4. Señales de alerta (dolores) -->
+<section class="pain">
+  <div class="wrap">
+    <span class="pain__kicker" id="painKicker"></span>
+    <h2 id="painTitle"></h2>
+    <div class="pain__list" id="painList"></div>
+  </div>
+</section>
+
+<div class="divider on-brand"></div>
+<!-- 5. Banners de imágenes #2 y #3 -->
+<div class="banner" data-banner="1"></div>
+<div class="divider on-brand"></div>
+<div class="banner" data-banner="2"></div>
+
+<!-- 6. Pestañas de contenido -->
+<section>
+  <div class="wrap">
+    <h2 id="tabsTitle"></h2>
+    <div class="tabs__bar" id="tabsBar" role="tablist"></div>
+    <div class="tabs__panel" id="tabsPanel" role="tabpanel"></div>
+  </div>
+</section>
+
+<!-- 7. Tabla comparativa -->
+<section class="on-brand">
+  <div class="wrap">
+    <h2 id="cmpTitle"></h2>
+    <p class="lead" id="cmpLead"></p>
+    <div class="cmp"><table id="cmpTable"></table></div>
+  </div>
+</section>
+
+<div class="divider on-brand"></div>
+<!-- 8. Banner de imágenes #4 -->
+<div class="banner" data-banner="3"></div>
+
+<!-- 9. Ticker inferior -->
+<div class="ticker soft" id="ticker2" aria-label="Mensajes de marca"></div>
+<div class="divider"></div>
+
+<!-- 10. Resultados en números -->
+<section class="on-brand" id="resultsSec">
+  <div class="wrap">
+    <h2 id="resTitle"></h2>
+    <p class="lead" id="resLead"></p>
+    <div class="stats" id="stats"></div>
+    <p class="stats-note" id="resNote"></p>
+  </div>
+</section>
+
+<!-- 11. Banner de imágenes #5 -->
+<div class="banner" data-banner="4"></div>
+<div class="divider on-brand"></div>
+
+<!-- 12. Reseñas -->
+<section id="reviews">
+  <div class="wrap">
+    <h2>Comentarios de los clientes</h2>
+    <div class="revs__summary">
+      <div class="revs__score"><b id="revScore"></b><div class="stars">★★★★★</div><div class="rev__meta" id="revCount"></div></div>
+      <div class="bars" id="revBars"></div>
+    </div>
+    <div class="revs__grid" id="revGrid"></div>
+  </div>
+</section>
+
+<!-- 13. Footer -->
+<footer>
+  <div class="wrap">
+    <div class="cols" id="footCols"></div>
+    <p class="disclaimer" id="disclaimer"></p>
+    <div class="legal" id="footLegal"></div>
+  </div>
+</footer>
+
+<!-- Flotantes -->
+<div class="sticky-cta" id="stickyCta"><button class="cta" type="button" id="stickyBtn">Pedir ahora – pago al recibir</button></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<button class="to-top" id="toTop" type="button" aria-label="Volver arriba">↑</button>
+
+<script>
+/* =====================================================================
+   CONFIG — editá sólo esto para adaptar la landing a tu producto
+   ===================================================================== */
+const CONFIG = {
+  store: { name: "ZenVit Store", logo: "img/logo.webp", phone: "+595 972 738 779", email: "",
+           social: { WhatsApp: "https://wa.me/595972738779" } },
+  currency: { prefix: "Gs. ", locale: "es-PY" },
+
+  product: {
+    name: "Articumina – Fórmula 9 en 1 con curcumina y colágeno tipo II",
+    proof: "Suplemento alimentario en cápsulas · 60 cápsulas · 30 días",
+    badges: [],   // las fotos ya traen texto; las insignias lo tapaban
+    images: ["img/producto-1.webp","img/producto-2.webp","img/producto-3.webp",
+             "img/producto-4.webp","img/producto-5.webp"],
+    chips: [
+      { icon: "🧡", title: "Curcumina + colágeno tipo II", text: "Junto a 7 nutrientes más en una sola fórmula" },
+      { icon: "🦴", title: "Huesos y articulaciones", text: "D3, K2, magnesio y zinc contribuyen al mantenimiento normal de los huesos" },
+      { icon: "💊", title: "60 cápsulas", text: "2 al día: un frasco dura 30 días" }
+    ]
+  },
+
+  /* Precios del catálogo. compare = el mismo frasco comprado suelto (ahorro real del combo). */
+  offers: [
+    { id: "1u", title: "1 frasco (30 días)",  qty: 1, price: 159000 },
+    { id: "2u", title: "2 frascos (60 días)", qty: 2, price: 259000, compare: 318000, tag: "⭐ EL MÁS ELEGIDO", default: true },
+    { id: "3u", title: "3 frascos (90 días)", qty: 3, price: 320000, compare: 477000, tag: "🔥 MEJOR PRECIO" }
+  ],
+
+  countdownMinutes: 0,   // sin contador: no hay una oferta que venza
+  viewers: null,          // sin "personas viendo": no es un dato real
+
+  /* mode "panel": el pedido entra al panel (pedidos_web) y avisa por Telegram. Si falla, ofrece WhatsApp. */
+  order: { mode: "panel", endpoint: "https://roruinqorwgolcrhhmpm.supabase.co/functions/v1/create-articumina-order",
+           whatsapp: "595972738779", webhookUrl: "", thankYouUrl: "" },
+
+  departments: ["Asunción","Central","Otro departamento (consultar envío)"],
+
+  tickerTop: ["🚚 ENVÍO GRATIS EN ASUNCIÓN Y CENTRAL","💵 PAGÁS AL RECIBIR","📦 COMBOS DESDE 2 FRASCOS","💬 ATENCIÓN POR WHATSAPP"],
+  tickerBottom: ["🧡 CURCUMINA","🦴 COLÁGENO TIPO II","☀️ VITAMINA D3","🥬 VITAMINA K2","⚡ MAGNESIO","🛡️ SELENIO","🔩 ZINC","🔋 COENZIMA Q10","🌿 MSM"],
+
+  /* Banners: [imagen, imagen-escritorio]. Si la primera imagen no existe, el bloque se oculta solo (ver PROMPTS_IMAGENES.md). */
+  banners: [
+    ["img/banner-1a.webp","img/banner-1b.webp"],
+    ["img/banner-2a.webp","img/banner-2b.webp"],
+    ["img/banner-3a.webp","img/banner-3b.webp"],
+    ["img/banner-4a.webp","img/banner-4b.webp"],
+    ["img/banner-5a.webp","img/banner-5b.webp"]
+  ],
+
+  pain: {
+    kicker: "🚶 TU MOVILIDAD, TODOS LOS DÍAS",
+    title: "¿Querés seguir haciendo lo que te gusta?",
+    items: [
+      { icon: "🌳", text: "Caminar, salir y hacer tus cosas a tu ritmo" },
+      { icon: "🏡", text: "Las tareas de la casa, el jardín o tu trabajo de siempre" },
+      { icon: "👨‍👩‍👧", text: "Compartir tiempo activo con tu familia" }
+    ]
+  },
+
+  tabs: {
+    title: "🧡 ¿Qué trae Articumina?",
+    items: [
+      { label: "🌿 Los 9 ingredientes", heading: "Fórmula 9 en 1 en una sola toma",
+        list: ["Curcumina","Colágeno tipo II","Vitamina K2","Vitamina D3","Magnesio","Selenio","Zinc","Coenzima Q10","MSM (metilsulfonilmetano)"],
+        text: "Suplemento alimentario en cápsulas para complementar tu alimentación diaria." },
+      { label: "🦴 Qué aporta cada uno", heading: "Nutrientes relacionados con huesos y articulaciones",
+        list: ["Curcumina: el compuesto principal de la cúrcuma","Colágeno tipo II: proteína estructural presente en el cartílago","Vitamina D3: contribuye a la absorción normal del calcio","Vitamina K2: participa en el metabolismo de los huesos","Magnesio y zinc: contribuyen al mantenimiento normal de los huesos","Selenio: participa en las defensas antioxidantes del cuerpo"],
+        text: "Información general de cada nutriente." },
+      { label: "💊 Cómo se toma", heading: "Simple de sumar a tu rutina",
+        list: ["📦 60 cápsulas por frasco","💊 2 cápsulas al día","📅 Un frasco dura 30 días","🚚 Te llega a tu casa y pagás al recibir"],
+        text: "Si estás embarazada, en lactancia o tomás medicación, consultá a tu médico antes de usarlo." }
+    ]
+  },
+
+  comparison: {
+    title: "Más completo que la cúrcuma sola",
+    lead: "Articumina combina la curcumina con otros 8 nutrientes en una sola cápsula.",
+    us: "Articumina", them: "Cúrcuma sola",
+    rows: [
+      ["Curcumina", true, true],
+      ["Colágeno tipo II", true, false],
+      ["Vitaminas D3 y K2", true, false],
+      ["Magnesio, zinc y selenio", true, false],
+      ["Coenzima Q10 y MSM", true, false],
+      ["Pago al recibir en tu casa", true, false]
+    ]
+  },
+
+  /* Sin encuesta propia todavía: sección oculta. */
+  results: { show: false, title: "", lead: "", stats: [], note: "" },
+
+  /* Sin reseñas reales todavía: sección oculta. Cargá reseñas de clientes y poné show:true. */
+  reviews: { show: false, score: 0, distribution: [0, 0, 0, 0, 0], items: [], mini: 6 },
+
+  recentOrders: [],
+
+  stickyCta: true,
+  disclaimer: "Articumina es un suplemento alimentario. No es un medicamento y no reemplaza una alimentación variada ni un tratamiento médico. Si estás embarazada, en lactancia o tomás medicación, consultá a tu médico.",
+  legal: []
+};
+
+/* =====================================================================
+   Lógica (no hace falta tocar)
+   ===================================================================== */
+const $ = id => document.getElementById(id);
+const money = n => CONFIG.currency.prefix + Number(n).toLocaleString(CONFIG.currency.locale);
+const pct = o => o.compare ? Math.round((1 - o.price / o.compare) * 100) : 0;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const store = { get(k){ try{ return localStorage.getItem(k) }catch(e){ return null } },
+                set(k,v){ try{ localStorage.setItem(k,v) }catch(e){} } };
+
+function img(src, alt, label, cls = "") {
+  const ph = `<div class='ph ${cls}'>${esc(label)}</div>`;
+  if (!src) return ph;
+  return `<img class="${cls}" src="${esc(src)}" alt="${esc(alt)}" loading="lazy" onerror="this.outerHTML=&quot;${ph.replace(/"/g,"&amp;quot;")}&quot;">`;
+}
+
+function ticker(el, items) {
+  const row = items.map(esc).join("&nbsp;&nbsp;•&nbsp;&nbsp;");
+  el.innerHTML = `<div class="ticker__track"><span>${row}</span><span aria-hidden="true">${row}</span></div>`;
+}
+
+/* --- Hero --- */
+const P = CONFIG.product;
+document.title = P.name;
+$("pTitle").textContent = P.name;
+$("pProof").textContent = P.proof;
+$("badges").innerHTML = P.badges.map(b => `<span class="badge ${b.dark ? "dark" : ""}">${esc(b.text)}</span>`).join("");
+$("chips").innerHTML = P.chips.map(c => `<div class="chip"><span class="chip__ico">${c.icon}</span><div><b>${esc(c.title)}</b><span>${esc(c.text)}</span></div></div>`).join("");
+
+let current = 0;
+function showImage(i) {
+  current = i;
+  const main = $("galleryMain");
+  main.querySelectorAll("img,.ph").forEach(n => n.remove());
+  main.insertAdjacentHTML("afterbegin", img(P.images[i], P.name, `Foto ${i + 1} · 1080×1080`));
+  [...$("thumbs").children].forEach((b, j) => b.setAttribute("aria-current", j === i));
+}
+$("thumbs").style.gridTemplateColumns = `repeat(${Math.max(P.images.length, 5)}, 1fr)`;
+$("thumbs").innerHTML = P.images.map((s, i) => `<button type="button" aria-label="Ver foto ${i + 1}">${img(s, "", "")}</button>`).join("");
+[...$("thumbs").children].forEach((b, i) => b.addEventListener("click", () => showImage(i)));
+showImage(0);
+
+/* swipe en la foto principal */
+let x0 = null;
+$("galleryMain").addEventListener("touchstart", e => x0 = e.touches[0].clientX, { passive: true });
+$("galleryMain").addEventListener("touchend", e => {
+  if (x0 === null) return;
+  const dx = e.changedTouches[0].clientX - x0; x0 = null;
+  if (Math.abs(dx) > 40) showImage((current + (dx < 0 ? 1 : -1) + P.images.length) % P.images.length);
+});
+
+if (CONFIG.viewers) {
+  const [a, b] = CONFIG.viewers;
+  const tick = () => $("viewersN").textContent = a + Math.floor(Math.random() * (b - a + 1));
+  tick(); setInterval(tick, 7000);
+} else $("viewers").remove();
+
+/* --- Ofertas --- */
+let selected = CONFIG.offers.find(o => o.default) || CONFIG.offers[0];
+// Las mismas ofertas se muestran en la ficha y dentro del checkout.
+function renderOffers() {
+  ["offers", "offersModal"].forEach(box => {
+    $(box).innerHTML = CONFIG.offers.map(o => `
+    <label class="offer" data-checked="${o.id === selected.id}">
+      ${o.tag ? `<span class="offer__tag">${esc(o.tag)}</span>` : ""}
+      <input type="radio" name="${box}" value="${o.id}" ${o.id === selected.id ? "checked" : ""}>
+      <div class="offer__body"><div class="offer__title">${esc(o.title)}</div>${pct(o) ? `<span class="offer__save">Ahorrá ${pct(o)}%</span>` : ""}</div>
+      <div class="offer__prices"><b>${money(o.price)}</b>${o.compare ? `<s>${money(o.compare)}</s>` : ""}</div>
+    </label>`).join("");
+    $(box).querySelectorAll("input").forEach(inp => inp.addEventListener("change", () => {
+      selected = CONFIG.offers.find(o => o.id === inp.value); renderOffers(); updatePrice();
+    }));
+  });
+}
+function updatePrice() {
+  $("priceNow").textContent = money(selected.price);
+  $("priceOld").textContent = selected.compare ? money(selected.compare) : "";
+  $("priceSave").textContent = pct(selected) ? `Ahorrá ${pct(selected)}%` : "";
+  $("priceSave").hidden = !pct(selected);
+  $("buyBtn").textContent = `Comprar ahora – ${money(selected.price)}`;
+  $("sumLabel").textContent = `Total · ${selected.title}`;
+  $("sumTotal").textContent = money(selected.price);
+  $("ctaBtn").textContent = `Confirmar pedido – ${money(selected.price)}`;
+}
+renderOffers(); updatePrice();
+
+/* --- Contador --- */
+if (CONFIG.countdownMinutes > 0) {
+  const key = "lp_cd_end";
+  let end = Number(store.get(key));
+  if (!end || end < Date.now()) { end = Date.now() + CONFIG.countdownMinutes * 60000; store.set(key, end); }
+  const cd = () => {
+    let s = Math.max(0, Math.round((end - Date.now()) / 1000));
+    if (s === 0) { end = Date.now() + CONFIG.countdownMinutes * 60000; store.set(key, end); }
+    $("cdTime").textContent = String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+  };
+  cd(); setInterval(cd, 1000);
+} else $("countdown").remove();
+
+/* --- Formulario --- */
+$("fDept").innerHTML = `<option value="">Elegí…</option>` + CONFIG.departments.map(d => `<option>${esc(d)}</option>`).join("");
+
+function validate() {
+  let ok = true;
+  const rules = {
+    fName: v => v.trim().length >= 3,
+    fPhone: v => !!localPhone(v),
+    fDept: v => !!v, fCity: v => v.trim().length >= 2, fAddr: v => v.trim().length >= 4
+  };
+  for (const [id, fn] of Object.entries(rules)) {
+    const f = $(id).closest(".field"), good = fn($(id).value);
+    f.classList.toggle("invalid", !good);
+    if (!good && ok) { $(id).focus(); ok = false; }
+  }
+  if (ok && !$("fConfirm").checked) { $("fConfirm").focus(); msg("Marcá la casilla de confirmación.", false); return false; }
+  return ok;
+}
+function msg(t, good) { const m = $("formMsg"); m.textContent = t; m.className = "form-msg " + (good ? "ok" : "bad"); }
+// Celular paraguayo como 09XXXXXXXX, o "" si no es válido.
+function localPhone(v) {
+  let d = String(v).replace(/\D/g, "");
+  if (d.startsWith("00")) d = d.slice(2);
+  if (d.startsWith("595")) d = d.slice(3);
+  d = d.replace(/^0+/, "");
+  return /^9\d{8}$/.test(d) ? "0" + d : "";
+}
+const cookie = n => (document.cookie.match(new RegExp("(?:^|; )" + n + "=([^;]*)")) || [])[1] || "";
+function whatsappLink(order) {
+  const lines = [`Hola! Quiero hacer un pedido:`, `🛍️ ${order.product}`, `📦 ${order.offer} – ${money(order.total)}`,
+    `👤 ${order.name}`, `📞 ${order.phone}`, `📍 ${order.address}, ${order.city}, ${order.department}`,
+    order.reference && `🏠 Ref: ${order.reference}`, order.maps && `🗺️ ${order.maps}`, `💵 Pago contra entrega`].filter(Boolean);
+  return `https://wa.me/${CONFIG.order.whatsapp}?text=${encodeURIComponent(lines.join("\n"))}`;
+}
+
+$("orderForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  $("formMsg").className = "form-msg";
+  if (!validate()) return;
+  const utm = new URLSearchParams(location.search);
+  const order = {
+    product: P.name, offer: selected.title, quantity: selected.qty, total: selected.price,
+    name: $("fName").value.trim(), phone: localPhone($("fPhone").value), department: $("fDept").value,
+    city: $("fCity").value.trim(), address: $("fAddr").value.trim(), reference: $("fRef").value.trim(),
+    maps: $("fMaps").value.trim(), page: location.href
+  };
+  const btn = $("ctaBtn"); btn.disabled = true;
+  try {
+    let orderId = "";
+    if (CONFIG.order.mode === "panel") {
+      const r = await fetch(CONFIG.order.endpoint, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cantidad: order.quantity, nombre: order.name, telefono: order.phone, departamento: order.department,
+          ciudad: order.city, direccion: order.address, referencia: order.reference, ubicacion_maps: order.maps,
+          website: $("fWebsite").value, landing_url: order.page, user_agent: navigator.userAgent,
+          utm_source: utm.get("utm_source") || "", utm_medium: utm.get("utm_medium") || "",
+          utm_campaign: utm.get("utm_campaign") || "", fbclid: utm.get("fbclid") || "",
+          meta_fbp: cookie("_fbp"), meta_fbc: cookie("_fbc")
+        })
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(data.error || "HTTP " + r.status);
+      orderId = data.orderId || "";
+    } else if (CONFIG.order.mode === "webhook" && CONFIG.order.webhookUrl) {
+      const r = await fetch(CONFIG.order.webhookUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(order) });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+    } else {
+      window.open(whatsappLink(order), "_blank", "noopener");
+    }
+    if (window.fbq) fbq("track", "Purchase", { value: order.total, currency: "PYG" }, orderId ? { eventID: orderId + ":purchase" } : undefined);
+    if (CONFIG.order.thankYouUrl) { location.href = CONFIG.order.thankYouUrl; return; }
+    $("doneText").textContent = `${order.offer} · ${money(order.total)} · pagás al recibir.`;
+    $("doneId").textContent = orderId ? `Pedido ${orderId}` : "";
+    $("doneId").hidden = !orderId;
+    $("orderForm").hidden = true; $("checkoutDone").hidden = false;
+    $("orderForm").reset(); renderOffers();
+  } catch (err) {
+    const m = $("formMsg");
+    m.className = "form-msg bad";
+    m.innerHTML = `No pudimos registrar el pedido. <a href="${esc(whatsappLink(order))}" target="_blank" rel="noopener">Envialo por WhatsApp</a> y lo cargamos nosotros.`;
+  } finally { btn.disabled = false; }
+});
+
+/* --- Reseñas --- */
+const R = CONFIG.reviews;
+if (R.show === false) { $("reviews").remove(); document.querySelector(".mini-revs").remove(); $("pStars").remove(); }
+else {
+const total = R.distribution.reduce((a, b) => a + b, 0) || R.items.length;
+const initials = n => n.split(/\s+/).map(w => w[0]).join("").slice(0, 2).toUpperCase();
+const starStr = n => "★".repeat(n) + "☆".repeat(5 - n);
+$("miniHead").innerHTML = `${total}+ clientas compartieron su experiencia<span>Calificación promedio de ${R.score} estrellas</span>`;
+$("miniRevs").innerHTML = R.items.slice(0, R.mini).map(r => `<div class="mini-rev"><b>${esc(r.name)}</b> <span class="ver">✓</span><div class="stars">${starStr(r.stars)}</div>${esc(r.text)}</div>`).join("");
+$("revScore").textContent = R.score;
+$("revCount").textContent = `${total} reseñas`;
+$("revBars").innerHTML = R.distribution.map((n, i) => `<div class="bar"><span>${5 - i} estrellas</span><div><i style="width:${total ? n / total * 100 : 0}%"></i></div><span>${n}</span></div>`).join("");
+$("revGrid").innerHTML = R.items.map(r => `<article class="rev"><div class="rev__head"><span class="avatar">${initials(r.name)}</span><div><b>${esc(r.name)}</b><div class="rev__meta"><span class="ver">Compra verificada</span> · ${esc(r.when)}</div></div></div><div class="stars">${starStr(r.stars)}</div><p>${esc(r.text)}</p>${r.img ? img(r.img, "Foto de la clienta", "") : ""}</article>`).join("");
+}
+
+/* --- Secciones de contenido --- */
+ticker($("ticker1"), CONFIG.tickerTop);
+ticker($("ticker2"), CONFIG.tickerBottom);
+document.querySelectorAll("[data-banner]").forEach(el => {
+  const pair = CONFIG.banners[+el.dataset.banner];
+  if (!pair) return el.remove();
+  const probe = new Image();
+  probe.onload = () => {
+    el.innerHTML = `<img src="${esc(pair[0])}" alt="">` +
+      `<img class="only-desktop" src="${esc(pair[1])}" alt="" loading="lazy" onerror="this.onerror=null; this.src=this.previousElementSibling.src">`;
+  };
+  probe.onerror = () => el.remove();
+  probe.src = pair[0];
+});
+
+$("painKicker").textContent = CONFIG.pain.kicker;
+$("painTitle").textContent = CONFIG.pain.title;
+$("painList").innerHTML = CONFIG.pain.items.map(p => `<div class="pain__item"><i>${p.icon}</i><p>${esc(p.text)}</p></div>`).join("");
+
+$("tabsTitle").textContent = CONFIG.tabs.title;
+function showTab(i) {
+  const t = CONFIG.tabs.items[i];
+  [...$("tabsBar").children].forEach((b, j) => b.setAttribute("aria-selected", j === i));
+  $("tabsPanel").innerHTML = `<h3>${esc(t.heading)}</h3><ul>${t.list.map(l => `<li>${esc(l)}</li>`).join("")}</ul><p>${esc(t.text)}</p>`;
+}
+$("tabsBar").innerHTML = CONFIG.tabs.items.map(t => `<button type="button" role="tab">${esc(t.label)}</button>`).join("");
+[...$("tabsBar").children].forEach((b, i) => b.addEventListener("click", () => showTab(i)));
+showTab(0);
+
+const C = CONFIG.comparison;
+$("cmpTitle").textContent = C.title; $("cmpLead").textContent = C.lead;
+$("cmpTable").innerHTML = `<thead><tr><th></th><th>${esc(C.us)}</th><th>${esc(C.them)}</th></tr></thead><tbody>` +
+  C.rows.map(([t, a, b]) => `<tr><td>${esc(t)}</td><td class="${a ? "yes" : "no"}">${a ? "✓" : "✕"}</td><td class="${b ? "yes" : "no"}">${b ? "✓" : "✕"}</td></tr>`).join("") + "</tbody>";
+
+const RS = CONFIG.results;
+if (RS.show) {
+  $("resTitle").textContent = RS.title; $("resLead").textContent = RS.lead; $("resNote").textContent = RS.note;
+  $("stats").innerHTML = RS.stats.map(s => `<div class="stat"><b>${esc(s.value)}</b><p>${esc(s.text)}</p></div>`).join("");
+} else $("resultsSec").remove();
+
+/* --- Footer --- */
+const S = CONFIG.store;
+$("footCols").innerHTML = `
+  <div>${S.logo ? `<img src="${esc(S.logo)}" alt="${esc(S.name)}" width="96" style="border-radius:12px;margin-bottom:10px">` : ""}<h4>Contacto</h4><p>WhatsApp: ${esc(S.phone)}</p>${S.email ? `<p>Correo: ${esc(S.email)}</p>` : ""}</div>
+  <div><h4>Enlaces</h4>${Object.entries(S.social).map(([k, v]) => `<p><a href="${esc(v)}" target="_blank" rel="noopener">${esc(k)}</a></p>`).join("")}</div>
+  <div><h4>Formas de pago</h4><p>💵 Pago contra entrega</p><p>🚚 Envío gratis en Asunción y Central</p></div>`;
+$("disclaimer").textContent = CONFIG.disclaimer;
+$("footLegal").innerHTML = `<span>© ${new Date().getFullYear()} ${esc(S.name)}</span>` + CONFIG.legal.map(([t, u]) => `<a href="${esc(u)}">${esc(t)}</a>`).join("");
+
+/* --- Flotantes --- */
+const dlg = $("checkout");
+function openCheckout() {
+  $("orderForm").hidden = false; $("checkoutDone").hidden = true; $("formMsg").className = "form-msg";
+  if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
+  document.body.style.overflow = "hidden";
+  if (window.fbq) fbq("track", "InitiateCheckout", { value: selected.price, currency: "PYG" });
+}
+const closeCheckout = () => dlg.close ? dlg.close() : dlg.removeAttribute("open");
+dlg.addEventListener("close", () => document.body.style.overflow = "");
+dlg.addEventListener("click", e => { if (e.target === dlg) closeCheckout(); });
+$("checkoutClose").addEventListener("click", closeCheckout);
+$("doneClose").addEventListener("click", closeCheckout);
+$("buyBtn").addEventListener("click", openCheckout);
+if (CONFIG.stickyCta) $("stickyBtn").addEventListener("click", openCheckout);
+else $("stickyCta").remove();
+addEventListener("scroll", () => {
+  const formBox = $("buyBox").getBoundingClientRect();
+  if (CONFIG.stickyCta) $("stickyCta").classList.toggle("show", formBox.bottom < 0);
+  $("toTop").classList.toggle("show", scrollY > 900);
+}, { passive: true });
+$("toTop").addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
+
+if (CONFIG.recentOrders.length) {
+  let k = 0;
+  const show = () => {
+    const o = CONFIG.recentOrders[k++ % CONFIG.recentOrders.length];
+    $("toast").innerHTML = `<span style="font-size:22px">💕</span><span><b>${esc(o.name)}</b> de ${esc(o.city)} hizo su pedido</span>`;
+    $("toast").classList.add("show");
+    setTimeout(() => $("toast").classList.remove("show"), 5000);
+  };
+  setTimeout(show, 8000); setInterval(show, 25000);
+}
+</script>
+</body>
+</html>
