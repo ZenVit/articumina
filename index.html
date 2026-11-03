@@ -137,6 +137,13 @@ section{padding:40px 0}
 .checkout__close{border:0;background:#f3f1f4;width:34px;height:34px;border-radius:50%;font-size:20px;line-height:1;cursor:pointer;color:var(--text)}
 .checkout .cod{border:0;border-radius:0;padding:16px}
 .checkout .offers{margin-bottom:14px}
+#ctaBtn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:13px 12px;text-transform:none;letter-spacing:0;box-shadow:0 6px 18px rgba(31,170,89,.35)}
+#ctaBtn .cta__main{font-size:18px;font-weight:800;text-transform:uppercase;letter-spacing:.3px}
+#ctaBtn .cta__sub{font-size:12.5px;font-weight:600;opacity:.95}
+.cta-perks{list-style:none;margin:12px 0 0;padding:10px 12px;display:grid;gap:5px;font-size:12.5px;color:var(--muted);background:#f6faf3;border-radius:10px}
+.cta-perks b{color:var(--text)}
+.city-other{margin-top:8px}
+.field select:disabled{background:#f4f3f6;color:#9a97a3}
 .order-sum{border:1px solid var(--line);border-radius:12px;background:#fffaf6;padding:12px 14px;margin:6px 0 14px}
 .order-sum h4{font-size:14px;margin-bottom:10px}
 .order-sum__item{display:flex;gap:10px;align-items:center;padding-bottom:10px;border-bottom:1px dashed var(--line)}
@@ -337,7 +344,8 @@ footer .legal{border-top:1px solid #4a4558;margin-top:24px;padding-top:16px;font
         <div class="field"><label for="fName">Nombre y apellido</label><input id="fName" name="name" autocomplete="name" placeholder="Ej: Ana López" required><div class="err">Escribí tu nombre.</div></div>
         <div class="field"><label for="fPhone">Teléfono / WhatsApp</label><input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Ej: 0981 234 567" required><div class="err">Escribí un número válido.</div></div>
         <div class="field"><label for="fDept">Departamento</label><select id="fDept" name="department" required></select><div class="err">Elegí tu departamento.</div></div>
-        <div class="field"><label for="fCity">Ciudad</label><input id="fCity" name="city" autocomplete="address-level2" placeholder="Ej: San Lorenzo" required><div class="err">Escribí tu ciudad.</div></div>
+        <div class="field"><label for="fCity">Ciudad</label><select id="fCity" name="city" required disabled><option value="">Primero elegí el departamento</option></select>
+          <input id="fCityOther" class="city-other" autocomplete="address-level2" placeholder="Escribí tu ciudad" hidden><div class="err">Elegí tu ciudad.</div></div>
         <div class="field"><label for="fAddr">Dirección</label><input id="fAddr" name="address" autocomplete="street-address" placeholder="Calle, número" required><div class="err">Escribí tu dirección.</div></div>
         <div class="field map-field">
           <label>📍 Ubicación de entrega <small>(así el delivery llega directo)</small></label>
@@ -358,7 +366,12 @@ footer .legal{border-top:1px solid #4a4558;margin-top:24px;padding-top:16px;font
           </dl>
         </div>
         <button class="cta" id="ctaBtn" type="submit">Confirmar pedido</button>
-        <div class="trust"><span>💵 Pagás al recibir</span><span>🔒 Tus datos solo se usan para la entrega</span></div>
+        <ul class="cta-perks">
+          <li>🚚 <b>Envío gratis</b> a todo el país</li>
+          <li>💵 <b>No pagás nada ahora:</b> pagás cuando lo recibís</li>
+          <li>💬 Te confirmamos el pedido por WhatsApp</li>
+          <li>🔒 Tus datos solo se usan para la entrega</li>
+        </ul>
         <div class="form-msg" id="formMsg" role="status" aria-live="polite"></div>
       </form>
   <div class="done" id="checkoutDone" hidden>
@@ -511,7 +524,28 @@ const CONFIG = {
   order: { mode: "panel", endpoint: "https://roruinqorwgolcrhhmpm.supabase.co/functions/v1/create-articumina-order",
            whatsapp: "595972738779", webhookUrl: "", thankYouUrl: "" },
 
-  departments: ["Asunción","Central","Otro departamento (interior)"],
+  /* Departamento → ciudades de la lista. "Otra ciudad" deja escribirla. Asunción y Central: entrega 24 a 48 hs. */
+  departments: {
+    "Asunción": ["Asunción"],
+    "Central": ["Areguá","Capiatá","Fernando de la Mora","Guarambaré","Itá","Itauguá","J. Augusto Saldívar","Lambaré","Limpio","Luque",
+                "Mariano Roque Alonso","Nueva Italia","Ñemby","San Antonio","San Lorenzo","Villa Elisa","Villeta","Ypacaraí","Ypané"],
+    "Alto Paraguay": ["Fuerte Olimpo","Bahía Negra","Puerto Casado"],
+    "Alto Paraná": ["Ciudad del Este","Hernandarias","Presidente Franco","Minga Guazú","Santa Rita","Juan León Mallorquín","Itakyry","Naranjal","Los Cedrales"],
+    "Amambay": ["Pedro Juan Caballero","Capitán Bado","Bella Vista Norte"],
+    "Boquerón": ["Filadelfia","Loma Plata","Mariscal Estigarribia"],
+    "Caaguazú": ["Coronel Oviedo","Caaguazú","Dr. J. Eulogio Estigarribia","Repatriación","Yhú","Carayaó","San José de los Arroyos"],
+    "Caazapá": ["Caazapá","San Juan Nepomuceno","Yuty","Abaí","Tavaí"],
+    "Canindeyú": ["Salto del Guairá","Curuguaty","Katueté","La Paloma","Ygatimí","Corpus Christi"],
+    "Concepción": ["Concepción","Horqueta","Yby Yaú","Belén","Loreto"],
+    "Cordillera": ["Caacupé","Altos","Arroyos y Esteros","Atyrá","Emboscada","Eusebio Ayala","Piribebuy","San Bernardino","Tobatí","Itacurubí de la Cordillera"],
+    "Guairá": ["Villarrica","Coronel Martínez","Independencia","Iturbe","Mbocayaty","Paso Yobái"],
+    "Itapúa": ["Encarnación","Cambyretá","Bella Vista","Capitán Miranda","Capitán Meza","Carmen del Paraná","Coronel Bogado","Fram","Hohenau","María Auxiliadora","Natalio","Obligado"],
+    "Misiones": ["San Juan Bautista","San Ignacio","Santa Rosa","Ayolas","Santiago","San Miguel"],
+    "Ñeembucú": ["Pilar","Alberdi","Humaitá","Mayor Martínez"],
+    "Paraguarí": ["Paraguarí","Acahay","Caapucú","Carapeguá","Pirayú","Quiindy","Sapucai","Yaguarón","Ybycuí"],
+    "Presidente Hayes": ["Villa Hayes","Benjamín Aceval","Nanawa","Pozo Colorado","Puerto Pinasco"],
+    "San Pedro": ["San Pedro del Ycuamandiyú","Santa Rosa del Aguaray","San Estanislao","Choré","Guayaibí","Lima","Tacuatí"]
+  },
 
   tickerTop: ["🚚 ENVÍO GRATIS A TODO EL PAÍS","💵 PAGÁS AL RECIBIR","📦 COMBOS DESDE 2 FRASCOS","💬 ATENCIÓN POR WHATSAPP"],
   tickerBottom: ["🧡 CURCUMINA","🦴 COLÁGENO TIPO II","☀️ VITAMINA D3","🥬 VITAMINA K2","⚡ MAGNESIO","🛡️ SELENIO","🔩 ZINC","🔋 COENZIMA Q10","🌿 MSM"],
@@ -668,7 +702,8 @@ function updatePrice() {
   $("sumSave").textContent = "– " + money(subtotal - selected.price);
   document.querySelectorAll(".sum-save").forEach(el => el.hidden = subtotal === selected.price);
   $("sumTotal").textContent = money(selected.price);
-  $("ctaBtn").textContent = `Confirmar pedido – ${money(selected.price)}`;
+  $("ctaBtn").innerHTML = `<span class="cta__main">✅ Confirmar mi pedido</span>` +
+    `<span class="cta__sub">${esc(selected.title)} · ${money(selected.price)}</span>`;
 }
 renderOffers(); updatePrice();
 
@@ -686,14 +721,33 @@ if (CONFIG.countdownMinutes > 0) {
 } else $("countdown").remove();
 
 /* --- Formulario --- */
-$("fDept").innerHTML = `<option value="">Elegí…</option>` + CONFIG.departments.map(d => `<option>${esc(d)}</option>`).join("");
+const OTHER_CITY = "__otra";
+$("fDept").innerHTML = `<option value="">Elegí tu departamento…</option>` +
+  Object.keys(CONFIG.departments).map(d => `<option>${esc(d)}</option>`).join("");
+function fillCities() {
+  const list = CONFIG.departments[$("fDept").value];
+  const city = $("fCity");
+  city.disabled = !list;
+  city.innerHTML = !list ? `<option value="">Primero elegí el departamento</option>`
+    : (list.length > 1 ? `<option value="">Elegí tu ciudad…</option>` : "") +
+      list.map(c => `<option>${esc(c)}</option>`).join("") + `<option value="${OTHER_CITY}">Otra ciudad…</option>`;
+  toggleOtherCity();
+}
+function toggleOtherCity() {
+  const other = $("fCity").value === OTHER_CITY;
+  $("fCityOther").hidden = !other;
+  if (other) $("fCityOther").focus();
+}
+const cityValue = () => $("fCity").value === OTHER_CITY ? $("fCityOther").value.trim() : $("fCity").value;
+$("fDept").addEventListener("change", fillCities);
+$("fCity").addEventListener("change", toggleOtherCity);
 
 function validate() {
   let ok = true;
   const rules = {
     fName: v => v.trim().length >= 3,
     fPhone: v => !!localPhone(v),
-    fDept: v => !!v, fCity: v => v.trim().length >= 2, fAddr: v => v.trim().length >= 4
+    fDept: v => !!v, fCity: () => cityValue().length >= 2, fAddr: v => v.trim().length >= 4
   };
   for (const [id, fn] of Object.entries(rules)) {
     const f = $(id).closest(".field"), good = fn($(id).value);
@@ -745,9 +799,9 @@ let geoTimer = null;
 function scheduleGeocode() { clearTimeout(geoTimer); geoTimer = setTimeout(geocode, 1000); }
 async function geocode() {
   if (pick.url) return;  // ya marcó su ubicación: no se la movemos
-  const city = $("fCity").value.trim(), addr = $("fAddr").value.trim(), dept = $("fDept").value;
+  const city = cityValue(), addr = $("fAddr").value.trim(), dept = $("fDept").value;
   if (city.length < 3) return;
-  const region = ["Asunción", "Central"].includes(dept) ? dept : "";
+  const region = dept === city ? "" : dept;
   const tries = [[addr, city, region], [city, region]].map(p => p.filter(Boolean).concat("Paraguay").join(", "));
   if (addr.length < 4) tries.shift();
   for (const [i, q] of tries.entries()) {
@@ -763,8 +817,8 @@ async function geocode() {
     } catch { return; }
   }
 }
-["fCity", "fAddr"].forEach(id => $(id).addEventListener("input", scheduleGeocode));
-$("fDept").addEventListener("change", scheduleGeocode);
+["fCityOther", "fAddr"].forEach(id => $(id).addEventListener("input", scheduleGeocode));
+["fDept", "fCity"].forEach(id => $(id).addEventListener("change", scheduleGeocode));
 async function initMap() {
   try { await loadLeaflet(); } catch { $("mapHint").textContent = "No se pudo cargar el mapa. Podés seguir sin marcar la ubicación."; return; }
   if (pick.map) { pick.map.invalidateSize(); return; }
@@ -811,10 +865,13 @@ $("orderForm").addEventListener("submit", async e => {
   const order = {
     product: P.name, offer: selected.title, quantity: selected.qty, total: selected.price,
     name: $("fName").value.trim(), phone: localPhone($("fPhone").value), department: $("fDept").value,
-    city: $("fCity").value.trim(), address: $("fAddr").value.trim(),
+    // En el panel el interior figura como "Interior": la ciudad lleva el departamento para no perderlo.
+    city: ["Asunción", "Central"].includes($("fDept").value) ? cityValue() : `${cityValue()}, ${$("fDept").value}`,
+    address: $("fAddr").value.trim(),
     maps: pick.url, page: location.href
   };
   const btn = $("ctaBtn"); btn.disabled = true;
+  btn.querySelector(".cta__main").textContent = "⏳ Enviando tu pedido…";
   try {
     let orderId = "";
     if (CONFIG.order.mode === "panel") {
@@ -860,6 +917,7 @@ $("orderForm").addEventListener("submit", async e => {
     $("orderForm").hidden = true; $("checkoutDone").hidden = false;
     $("orderForm").reset(); renderOffers();
     if (pick.marker) { pick.marker.remove(); pick.marker = null; }
+    fillCities();
     pick.url = ""; pick.lastQuery = ""; $("mapHint").className = "map-hint"; $("mapHint").textContent = "O tocá el mapa donde está tu casa. Podés arrastrar el pin.";
     // En el celular se abre WhatsApp solo; el botón queda por si el navegador no lo abre.
     if (orderId && matchMedia("(pointer:coarse)").matches) setTimeout(() => { location.href = waUrl; }, 1500);
@@ -867,7 +925,7 @@ $("orderForm").addEventListener("submit", async e => {
     const m = $("formMsg");
     m.className = "form-msg bad";
     m.innerHTML = `No pudimos registrar el pedido. <a href="${esc(whatsappLink(order))}" target="_blank" rel="noopener">Envialo por WhatsApp</a> y lo cargamos nosotros.`;
-  } finally { btn.disabled = false; }
+  } finally { btn.disabled = false; updatePrice(); }
 });
 
 /* --- Reseñas --- */
