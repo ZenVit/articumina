@@ -907,6 +907,7 @@ $("orderForm").addEventListener("submit", async e => {
       window.open(whatsappLink(order), "_blank", "noopener");
     }
     if (window.fbq) fbq("track", "Purchase", { value: order.total, currency: "PYG", content_name: "Articumina", content_type: "product", num_items: order.quantity }, orderId ? { eventID: orderId + ":purchase" } : undefined);
+    if (window.zvVisitas) zvVisitas.track("purchase", { orderId, revenue: order.total });
     if (CONFIG.order.thankYouUrl) { location.href = CONFIG.order.thankYouUrl; return; }
     const first = order.name.split(/\s+/)[0];
     const local = ["Asunción", "Central"].includes(order.department);
@@ -1013,6 +1014,7 @@ function openCheckout() {
   document.body.style.overflow = "hidden";
   initMap();
   if (window.fbq) fbq("track", "InitiateCheckout", { value: selected.price, currency: "PYG" });
+  if (window.zvVisitas) zvVisitas.track("begin_checkout");
 }
 const closeCheckout = () => dlg.close ? dlg.close() : dlg.removeAttribute("open");
 dlg.addEventListener("close", () => document.body.style.overflow = "");
@@ -1040,5 +1042,8 @@ if (CONFIG.recentOrders.length) {
   setTimeout(show, 8000); setInterval(show, 25000);
 }
 </script>
+<!-- Visitas en vivo para el panel (Vista en tiempo real). -->
+<script src="zv-visitas.js" data-landing="landing_articumina" data-product="ARTICUMINA"
+        data-endpoint="https://roruinqorwgolcrhhmpm.supabase.co/functions/v1/track-visitor" defer></script>
 </body>
 </html>
