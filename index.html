@@ -136,11 +136,31 @@ section{padding:40px 0}
 .checkout .offers{margin-bottom:14px}
 .summary{display:flex;justify-content:space-between;align-items:center;background:#fff6ef;border-radius:10px;padding:12px 14px;margin:4px 0 12px;font-size:14px}
 .summary b{font-size:18px;color:var(--brand-dark)}
-.done{text-align:center;padding:28px 18px 24px}
-.done__icon{font-size:46px}
-.done h3{font-size:20px;margin:8px 0}
-.done p{color:var(--muted);margin-bottom:8px}
-.done .order-id{display:inline-block;background:#fff6ef;color:var(--brand-dark);font-weight:800;border-radius:8px;padding:6px 12px;margin:6px 0 14px}
+.done{padding:22px 16px 20px}
+.done__top{text-align:center;margin-bottom:16px}
+.done__check{width:58px;height:58px;margin:0 auto 10px;border-radius:50%;background:var(--ok);color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 8px #e7f6dc;animation:pop .45s ease-out}
+@keyframes pop{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.12)}100%{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.done__check{animation:none}}
+.done__top h3{font-size:21px;margin-bottom:4px}
+.done__top p{color:var(--muted);font-size:14px}
+.done__id{display:inline-block;background:#fff6ef;color:var(--brand-dark);font-weight:800;border-radius:8px;padding:5px 12px;margin-top:10px;font-size:14px}
+.receipt{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.receipt__item{display:flex;gap:12px;align-items:center;padding:12px;background:#fffaf6}
+.receipt__item img{width:62px;height:62px;object-fit:cover;border-radius:10px;flex:none}
+.receipt__item b{display:block;font-size:14px}
+.receipt__item span{font-size:13px;color:var(--muted)}
+.receipt dl{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;padding:12px;font-size:13px;border-top:1px solid var(--line)}
+.receipt dt{color:var(--muted)}
+.receipt dd{text-align:right;font-weight:600;overflow-wrap:anywhere}
+.receipt .total{font-size:16px;color:var(--brand-dark)}
+.steps{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:10px}
+.steps li{display:flex;gap:12px;align-items:flex-start;font-size:13px}
+.steps i{flex:none;width:28px;height:28px;border-radius:50%;background:var(--brand-soft);color:var(--brand-dark);font-style:normal;font-weight:800;display:flex;align-items:center;justify-content:center}
+.steps b{display:block;font-size:14px}
+.steps span{color:var(--muted)}
+.tip{background:#f4faef;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:14px}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border-radius:10px;padding:14px;font-weight:800;font-size:15px;color:#fff;background:#25d366;text-decoration:none;margin-bottom:8px}
+.ghost{display:block;width:100%;border:0;background:none;font:inherit;font-size:14px;font-weight:600;color:var(--muted);padding:10px;cursor:pointer}
 
 /* ---------- Mini testimonios del hero ---------- */
 .mini-revs{margin-top:22px}
@@ -304,12 +324,29 @@ footer .legal{border-top:1px solid #4a4558;margin-top:24px;padding-top:16px;font
         <div class="form-msg" id="formMsg" role="status" aria-live="polite"></div>
       </form>
   <div class="done" id="checkoutDone" hidden>
-    <div class="done__icon">✅</div>
-    <h3>¡Pedido recibido!</h3>
-    <p id="doneText"></p>
-    <span class="order-id" id="doneId"></span>
-    <p>Te vamos a escribir por WhatsApp para coordinar la entrega.</p>
-    <button class="cta" type="button" id="doneClose">Listo</button>
+    <div class="done__top">
+      <div class="done__check" aria-hidden="true">✓</div>
+      <h3 id="doneTitle">¡Gracias! Tu pedido está confirmado</h3>
+      <p>No tenés que pagar nada ahora: pagás cuando lo recibís.</p>
+      <span class="done__id" id="doneId"></span>
+    </div>
+    <div class="receipt">
+      <div class="receipt__item"><img id="doneImg" alt="Articumina"><div><b id="doneProduct"></b><span id="doneOffer"></span></div></div>
+      <dl>
+        <dt>Entrega en</dt><dd id="doneAddr"></dd>
+        <dt>Envío</dt><dd id="doneShip"></dd>
+        <dt>Pago</dt><dd>Al recibir</dd>
+        <dt class="total">Total</dt><dd class="total" id="doneTotal"></dd>
+      </dl>
+    </div>
+    <ol class="steps">
+      <li><i>1</i><div><b>Te escribimos por WhatsApp</b><span>Al <span id="donePhone"></span>, para confirmar el día de entrega.</span></div></li>
+      <li><i>2</i><div><b>Preparamos tu pedido</b><span>Lo despachamos apenas confirmás.</span></div></li>
+      <li><i>3</i><div><b>Lo recibís y pagás</b><span>Le pagás al repartidor cuando te lo entrega.</span></div></li>
+    </ol>
+    <div class="tip">💊 <b>Cómo se toma:</b> 2 cápsulas al día, con una comida. Un frasco rinde 30 días.</div>
+    <a class="wa-btn" id="doneWa" target="_blank" rel="noopener">💬 Escribinos por WhatsApp</a>
+    <button class="ghost" type="button" id="doneClose">Seguir mirando</button>
   </div>
 </dialog>
 
@@ -672,9 +709,20 @@ $("orderForm").addEventListener("submit", async e => {
     }
     if (window.fbq) fbq("track", "Purchase", { value: order.total, currency: "PYG" }, orderId ? { eventID: orderId + ":purchase" } : undefined);
     if (CONFIG.order.thankYouUrl) { location.href = CONFIG.order.thankYouUrl; return; }
-    $("doneText").textContent = `${order.offer} · ${money(order.total)} · pagás al recibir.`;
-    $("doneId").textContent = orderId ? `Pedido ${orderId}` : "";
+    const first = order.name.split(/\s+/)[0];
+    const zoneFree = ["Asunción", "Central"].includes(order.department);
+    $("doneTitle").textContent = `¡Gracias, ${first}! Tu pedido está confirmado`;
+    $("doneId").textContent = orderId ? `Pedido N° ${orderId}` : "";
     $("doneId").hidden = !orderId;
+    $("doneImg").src = P.images[0];
+    $("doneProduct").textContent = "Articumina";
+    $("doneOffer").textContent = order.offer;
+    $("doneAddr").textContent = `${order.address}, ${order.city}`;
+    $("doneShip").textContent = zoneFree ? "Gratis" : "Te confirmamos por WhatsApp";
+    $("doneTotal").textContent = money(order.total);
+    $("donePhone").textContent = order.phone;
+    $("doneWa").href = `https://wa.me/${CONFIG.order.whatsapp}?text=${encodeURIComponent(`Hola! Hice el pedido ${orderId || ""} de Articumina (${order.offer}) desde la página.`)}`;
+    dlg.scrollTop = 0;
     $("orderForm").hidden = true; $("checkoutDone").hidden = false;
     $("orderForm").reset(); renderOffers();
   } catch (err) {
