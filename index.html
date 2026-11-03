@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Articumina</title>
-<meta name="description" content="Articumina: suplemento alimentario 9 en 1 con curcumina y colágeno tipo II. Envío gratis en Asunción y Central, pagás al recibir.">
+<meta name="description" content="Articumina: suplemento alimentario 9 en 1 con curcumina y colágeno tipo II. Envío gratis a todo el país, pagás al recibir.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
@@ -160,6 +160,7 @@ section{padding:40px 0}
 .steps span{color:var(--muted)}
 .tip{background:#f4faef;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:14px}
 .wa-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border-radius:10px;padding:14px;font-weight:800;font-size:15px;color:#fff;background:#25d366;text-decoration:none;margin-bottom:8px}
+.wa-note{text-align:center;font-size:12px;color:var(--muted);margin:-2px 0 16px}
 .ghost{display:block;width:100%;border:0;background:none;font:inherit;font-size:14px;font-weight:600;color:var(--muted);padding:10px;cursor:pointer}
 
 /* ---------- Mini testimonios del hero ---------- */
@@ -291,7 +292,7 @@ footer .legal{border-top:1px solid #4a4558;margin-top:24px;padding-top:16px;font
       <div class="buy" id="buyBox">
         <div class="offers" id="offers" role="radiogroup" aria-label="Elegí tu oferta"></div>
         <button class="cta" id="buyBtn" type="button">Comprar ahora – pago al recibir</button>
-        <div class="trust"><span>🚚 Envío gratis en Asunción y Central</span><span>💵 Pagás al recibir</span><span>🔒 Compra segura</span></div>
+        <div class="trust"><span>🚚 Envío gratis a todo el país</span><span>💵 Pagás al recibir</span><span>🔒 Compra segura</span></div>
       </div>
 
       <div class="mini-revs">
@@ -326,10 +327,12 @@ footer .legal{border-top:1px solid #4a4558;margin-top:24px;padding-top:16px;font
   <div class="done" id="checkoutDone" hidden>
     <div class="done__top">
       <div class="done__check" aria-hidden="true">✓</div>
-      <h3 id="doneTitle">¡Gracias! Tu pedido está confirmado</h3>
-      <p>No tenés que pagar nada ahora: pagás cuando lo recibís.</p>
+      <h3 id="doneTitle">¡Gracias! Recibimos tu pedido</h3>
+      <p><b>Último paso:</b> confirmalo por WhatsApp y te mandamos el resumen.</p>
       <span class="done__id" id="doneId"></span>
     </div>
+    <a class="wa-btn" id="doneWa" target="_blank" rel="noopener">✅ Confirmar mi pedido por WhatsApp</a>
+    <p class="wa-note">Se abre WhatsApp con el mensaje listo: solo tocá enviar.</p>
     <div class="receipt">
       <div class="receipt__item"><img id="doneImg" alt="Articumina"><div><b id="doneProduct"></b><span id="doneOffer"></span></div></div>
       <dl>
@@ -340,12 +343,11 @@ footer .legal{border-top:1px solid #4a4558;margin-top:24px;padding-top:16px;font
       </dl>
     </div>
     <ol class="steps">
-      <li><i>1</i><div><b>Te escribimos por WhatsApp</b><span>Al <span id="donePhone"></span>, para confirmar el día de entrega.</span></div></li>
-      <li><i>2</i><div><b>Preparamos tu pedido</b><span>Lo despachamos apenas confirmás.</span></div></li>
+      <li><i>1</i><div><b>Confirmá por WhatsApp</b><span>Te respondemos al instante con el resumen de tu pedido.</span></div></li>
+      <li><i>2</i><div><b>El delivery te contacta</b><span id="doneWindow"></span></div></li>
       <li><i>3</i><div><b>Lo recibís y pagás</b><span>Le pagás al repartidor cuando te lo entrega.</span></div></li>
     </ol>
     <div class="tip">💊 <b>Cómo se toma:</b> 2 cápsulas al día, con una comida. Un frasco rinde 30 días.</div>
-    <a class="wa-btn" id="doneWa" target="_blank" rel="noopener">💬 Escribinos por WhatsApp</a>
     <button class="ghost" type="button" id="doneClose">Seguir mirando</button>
   </div>
 </dialog>
@@ -472,9 +474,9 @@ const CONFIG = {
   order: { mode: "panel", endpoint: "https://roruinqorwgolcrhhmpm.supabase.co/functions/v1/create-articumina-order",
            whatsapp: "595972738779", webhookUrl: "", thankYouUrl: "" },
 
-  departments: ["Asunción","Central","Otro departamento (consultar envío)"],
+  departments: ["Asunción","Central","Otro departamento (interior)"],
 
-  tickerTop: ["🚚 ENVÍO GRATIS EN ASUNCIÓN Y CENTRAL","💵 PAGÁS AL RECIBIR","📦 COMBOS DESDE 2 FRASCOS","💬 ATENCIÓN POR WHATSAPP"],
+  tickerTop: ["🚚 ENVÍO GRATIS A TODO EL PAÍS","💵 PAGÁS AL RECIBIR","📦 COMBOS DESDE 2 FRASCOS","💬 ATENCIÓN POR WHATSAPP"],
   tickerBottom: ["🧡 CURCUMINA","🦴 COLÁGENO TIPO II","☀️ VITAMINA D3","🥬 VITAMINA K2","⚡ MAGNESIO","🛡️ SELENIO","🔩 ZINC","🔋 COENZIMA Q10","🌿 MSM"],
 
   /* Banners: [imagen, imagen-escritorio]. Si la primera imagen no existe, el bloque se oculta solo (ver PROMPTS_IMAGENES.md). */
@@ -710,21 +712,26 @@ $("orderForm").addEventListener("submit", async e => {
     if (window.fbq) fbq("track", "Purchase", { value: order.total, currency: "PYG" }, orderId ? { eventID: orderId + ":purchase" } : undefined);
     if (CONFIG.order.thankYouUrl) { location.href = CONFIG.order.thankYouUrl; return; }
     const first = order.name.split(/\s+/)[0];
-    const zoneFree = ["Asunción", "Central"].includes(order.department);
-    $("doneTitle").textContent = `¡Gracias, ${first}! Tu pedido está confirmado`;
+    const local = ["Asunción", "Central"].includes(order.department);
+    $("doneTitle").textContent = `¡Gracias, ${first}! Recibimos tu pedido`;
     $("doneId").textContent = orderId ? `Pedido N° ${orderId}` : "";
     $("doneId").hidden = !orderId;
     $("doneImg").src = P.images[0];
     $("doneProduct").textContent = "Articumina";
     $("doneOffer").textContent = order.offer;
     $("doneAddr").textContent = `${order.address}, ${order.city}`;
-    $("doneShip").textContent = zoneFree ? "Gratis" : "Te confirmamos por WhatsApp";
+    $("doneShip").textContent = "Gratis";
     $("doneTotal").textContent = money(order.total);
-    $("donePhone").textContent = order.phone;
-    $("doneWa").href = `https://wa.me/${CONFIG.order.whatsapp}?text=${encodeURIComponent(`Hola! Hice el pedido ${orderId || ""} de Articumina (${order.offer}) desde la página.`)}`;
+    $("doneWindow").textContent = `Coordina con vos la entrega en ${local ? "24 a 48 hs" : "48 a 72 hs, según la zona"}.`;
+    // El bot reconoce "confirmo mi pedido N° PY…" y responde el resumen (gratis: escribe el cliente).
+    const confirmText = orderId ? `Hola, confirmo mi pedido N° ${orderId}` : `Hola! Hice un pedido de Articumina (${order.offer}) desde la página.`;
+    const waUrl = `https://wa.me/${CONFIG.order.whatsapp}?text=${encodeURIComponent(confirmText)}`;
+    $("doneWa").href = waUrl;
     dlg.scrollTop = 0;
     $("orderForm").hidden = true; $("checkoutDone").hidden = false;
     $("orderForm").reset(); renderOffers();
+    // En el celular se abre WhatsApp solo; el botón queda por si el navegador no lo abre.
+    if (orderId && matchMedia("(pointer:coarse)").matches) setTimeout(() => { location.href = waUrl; }, 1500);
   } catch (err) {
     const m = $("formMsg");
     m.className = "form-msg bad";
@@ -792,7 +799,7 @@ const S = CONFIG.store;
 $("footCols").innerHTML = `
   <div>${S.logo ? `<img src="${esc(S.logo)}" alt="${esc(S.name)}" width="96" style="border-radius:12px;margin-bottom:10px">` : ""}<h4>Contacto</h4><p>WhatsApp: ${esc(S.phone)}</p>${S.email ? `<p>Correo: ${esc(S.email)}</p>` : ""}</div>
   <div><h4>Enlaces</h4>${Object.entries(S.social).map(([k, v]) => `<p><a href="${esc(v)}" target="_blank" rel="noopener">${esc(k)}</a></p>`).join("")}</div>
-  <div><h4>Formas de pago</h4><p>💵 Pago contra entrega</p><p>🚚 Envío gratis en Asunción y Central</p></div>`;
+  <div><h4>Formas de pago</h4><p>💵 Pago contra entrega</p><p>🚚 Envío gratis a todo el país</p></div>`;
 $("disclaimer").textContent = CONFIG.disclaimer;
 $("footLegal").innerHTML = `<span>© ${new Date().getFullYear()} ${esc(S.name)}</span>` + CONFIG.legal.map(([t, u]) => `<a href="${esc(u)}">${esc(t)}</a>`).join("");
 
