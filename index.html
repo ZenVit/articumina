@@ -156,7 +156,9 @@ section{padding:40px 0}
 .order-sum .free,.order-sum dd.sum-save{color:var(--ok)}
 .order-sum .total{font-size:17px;font-weight:800;color:var(--text);padding-top:6px;border-top:1px solid var(--line)}
 .order-sum dd.total{color:var(--brand-dark)}
-.map-field small{font-weight:400;color:var(--muted)}
+.map-field{margin-top:10px}
+.map-field summary{padding:8px 0;font-size:13px;font-weight:700;color:var(--brand-dark);cursor:pointer}
+.map-field[open] summary{margin-bottom:4px}
 .geo-btn{width:100%;border:1.5px solid var(--brand);background:#fff6ef;color:var(--brand-dark);font:inherit;font-weight:700;font-size:14px;border-radius:10px;padding:11px;cursor:pointer;margin-bottom:8px}
 .geo-btn:disabled{opacity:.6;cursor:wait}
 .pick-map{height:220px;border-radius:10px;border:1px solid #d8d6de;overflow:hidden;background:#eef0f2;z-index:0}
@@ -381,12 +383,6 @@ fbq('track', 'ViewContent', { content_name: 'Articumina', content_type: 'product
         <div class="field"><label for="fCity">Ciudad</label><select id="fCity" name="city" required disabled><option value="">Primero elegí el departamento</option></select>
           <input id="fCityOther" class="city-other" autocomplete="address-level2" placeholder="Escribí tu ciudad" hidden><div class="err">Elegí tu ciudad.</div></div>
         <div class="field"><label for="fAddr">Dirección</label><input id="fAddr" name="address" autocomplete="street-address" placeholder="Calle, número" required><div class="err">Escribí tu dirección.</div></div>
-        <div class="field map-field">
-          <label>📍 Ubicación de entrega <small>(así el delivery llega directo)</small></label>
-          <button type="button" class="geo-btn" id="geoBtn">📍 Usar mi ubicación actual</button>
-          <div class="pick-map" id="pickMap" aria-label="Mapa para marcar la ubicación de entrega"></div>
-          <p class="map-hint" id="mapHint">O tocá el mapa donde está tu casa. Podés arrastrar el pin.</p>
-        </div>
         <div class="hp" aria-hidden="true"><label>No completar <input id="fWebsite" tabindex="-1" autocomplete="off"></label></div>
         <div class="order-sum">
           <h4>🧾 Resumen del pedido</h4>
@@ -401,6 +397,12 @@ fbq('track', 'ViewContent', { content_name: 'Articumina', content_type: 'product
           </dl>
         </div>
         <button class="cta" id="ctaBtn" type="submit">Confirmar pedido</button>
+        <details class="map-field" id="mapDetails">
+          <summary id="mapSummary">Agregar ubicación (opcional)</summary>
+          <button type="button" class="geo-btn" id="geoBtn">📍 Usar mi ubicación actual</button>
+          <div class="pick-map" id="pickMap" aria-label="Mapa para marcar la ubicación de entrega"></div>
+          <p class="map-hint" id="mapHint">O tocá el mapa donde está tu casa. Podés arrastrar el pin.</p>
+        </details>
         <ul class="cta-perks">
           <li>🚚 <b>Envío gratis</b> a todo el país</li>
           <li>💵 <b>No pagás nada ahora:</b> pagás cuando lo recibís</li>
@@ -830,6 +832,7 @@ function validate() {
 /* --- Mapa de entrega (Leaflet + OpenStreetMap, se carga al abrir el checkout) --- */
 // url solo se llena con una ubicación confirmada (GPS, toque, arrastre o "Sí, es acá"):
 // el pin aproximado de la dirección escrita no se manda al delivery sin confirmar.
+const mapDetails = $("mapDetails");
 const pick = { map: null, marker: null, url: "", loading: null, lastQuery: "" };
 function loadLeaflet() {
   if (window.L) return Promise.resolve();
@@ -861,14 +864,18 @@ function setPin(lat, lng, zoom, approx = false) {
     return;
   }
   pick.url = `https://www.google.com/maps?q=${pos[0]},${pos[1]}`;
+  $("mapSummary").textContent = "Ubicación agregada (editar)";
   hint.className = "map-hint ok"; hint.textContent = "✅ Ubicación marcada. Si no es exacta, arrastrá el pin.";
 }
 
 // Con ciudad y dirección escritas, el mapa va a la zona aproximada (OpenStreetMap Nominatim).
 let geoTimer = null;
-function scheduleGeocode() { clearTimeout(geoTimer); geoTimer = setTimeout(geocode, 1000); }
+function scheduleGeocode() {
+  clearTimeout(geoTimer);
+  if (mapDetails.open) geoTimer = setTimeout(geocode, 1000);
+}
 async function geocode() {
-  if (pick.url) return;  // ya marcó su ubicación: no se la movemos
+  if (!mapDetails.open || !dlg.open || pick.url) return;
   const city = cityValue(), addr = $("fAddr").value.trim(), dept = $("fDept").value;
   if (city.length < 3) return;
   const region = dept === city ? "" : dept;
@@ -880,9 +887,12 @@ async function geocode() {
       const r = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=py&accept-language=es&q=${encodeURIComponent(q)}`);
       const hit = (await r.json())[0];
       if (!hit) continue;
-      pick.lastQuery = q;
+      if (!mapDetails.open || !dlg.open) return;
       await initMap();
-      if (window.L && pick.map && !pick.url) setPin(+hit.lat, +hit.lon, i === 0 && addr.length >= 4 ? 17 : 14, true);
+      if (mapDetails.open && dlg.open && pick.map && !pick.url) {
+        pick.lastQuery = q;
+        setPin(+hit.lat, +hit.lon, i === 0 && addr.length >= 4 ? 17 : 14, true);
+      }
       return;
     } catch { return; }
   }
@@ -897,6 +907,10 @@ async function initMap() {
   pick.map.on("click", e => setPin(e.latlng.lat, e.latlng.lng));
   setTimeout(() => pick.map.invalidateSize(), 200);
 }
+mapDetails.addEventListener("toggle", () => {
+  if (mapDetails.open && dlg.open) initMap();
+  scheduleGeocode();
+});
 $("geoBtn").addEventListener("click", () => {
   const hint = $("mapHint"), btn = $("geoBtn");
   if (!navigator.geolocation) { hint.className = "map-hint bad"; hint.textContent = "Tu teléfono no comparte la ubicación: tocá el mapa donde está tu casa."; return; }
@@ -991,6 +1005,8 @@ $("orderForm").addEventListener("submit", async e => {
     dlg.scrollTop = 0;
     $("orderForm").hidden = true; $("checkoutDone").hidden = false;
     $("orderForm").reset(); renderOffers();
+    mapDetails.open = false;
+    $("mapSummary").textContent = "Agregar ubicación (opcional)";
     if (pick.marker) { pick.marker.remove(); pick.marker = null; }
     fillCities();
     pick.url = ""; pick.lastQuery = ""; $("mapHint").className = "map-hint"; $("mapHint").textContent = "O tocá el mapa donde está tu casa. Podés arrastrar el pin.";
@@ -1065,7 +1081,7 @@ function openCheckout() {
   $("orderForm").hidden = false; $("checkoutDone").hidden = true; $("formMsg").className = "form-msg";
   if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
   document.body.style.overflow = "hidden";
-  initMap();
+  mapDetails.open = false;
   if (window.fbq) fbq("track", "InitiateCheckout", { value: finalPrice(selected), currency: "PYG" });
   if (window.zvVisitas) zvVisitas.track("begin_checkout");
 }
