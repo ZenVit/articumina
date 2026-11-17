@@ -56,15 +56,29 @@ section{padding:40px 0}
 .ph{background:#f1eef3;color:#8b8796;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;font-weight:500;aspect-ratio:1/1;width:100%}
 
 /* ---------- Hero / producto ---------- */
-.hero{padding:20px 0 30px}
-.hero__grid{display:grid;gap:28px}
-@media (min-width:900px){.hero__grid{grid-template-columns:1.05fr 1fr;align-items:start}.gallery{position:sticky;top:16px}}
+.hero{padding:12px 0 26px}
+.hero__grid{display:grid;gap:14px}
+@media (max-width:899px){
+  .gallery,.hero__details{display:contents}
+  .hero__summary{order:1}
+  .gallery__thumbs{order:2}
+  .buy{order:3}
+  .mini-revs{order:4}
+}
+@media (min-width:900px){
+  .hero{padding-top:20px}
+  .hero__grid{grid-template-columns:1.05fr 1fr;gap:28px;align-items:start}
+  .gallery{position:sticky;top:16px}
+  .hero__summary{margin-bottom:16px}
+}
 .gallery__main{position:relative;border-radius:var(--radius);overflow:hidden;background:#faf7f9}
-.gallery__main img,.gallery__main .ph{aspect-ratio:var(--gallery-ratio);object-fit:cover;width:100%}
+.gallery__main img,.gallery__main .ph{aspect-ratio:var(--gallery-ratio);object-fit:contain;width:100%;height:auto}
 .gallery__badges{position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:6px}
 .badge{display:inline-block;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;color:#fff;background:var(--brand)}
 .badge.dark{background:#2e2a39}
-.gallery__thumbs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:10px}
+.gallery__thumbs{display:flex;gap:8px}
+@media (min-width:900px){.gallery__thumbs{margin-top:10px}}
+.gallery__thumbs button{width:54px}
 .gallery__thumbs button{border:2px solid transparent;border-radius:8px;overflow:hidden;padding:0;background:none;cursor:pointer}
 .gallery__thumbs button[aria-current="true"]{border-color:var(--brand)}
 .gallery__thumbs img,.gallery__thumbs .ph{aspect-ratio:var(--gallery-ratio);object-fit:cover;font-size:0}
@@ -73,15 +87,11 @@ section{padding:40px 0}
 .dot{width:8px;height:8px;border-radius:50%;background:#e0245e;box-shadow:0 0 0 0 rgba(224,36,94,.6);animation:pulse 1.6s infinite}
 @keyframes pulse{70%{box-shadow:0 0 0 8px rgba(224,36,94,0)}100%{box-shadow:0 0 0 0 rgba(224,36,94,0)}}
 .title{font-size:clamp(24px,5.5vw,32px);font-weight:700;line-height:1.2}
-.proof{display:flex;align-items:center;gap:8px;margin:8px 0 14px;font-size:14px;color:var(--muted)}
 .stars{color:var(--star);letter-spacing:1px}
-.chips{display:grid;gap:8px;margin-bottom:16px}
-.chip{display:flex;gap:12px;align-items:center;background:#fff3ea;border-radius:10px;padding:10px 12px}
-.chip__ico{font-size:22px;width:32px;text-align:center}
-.chip b{display:block;font-size:14px}
-.chip span{font-size:13px;color:var(--muted)}
-.price{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px}
-.price__now{font-size:28px;font-weight:800;color:var(--brand)}
+.price{display:flex;align-items:center;flex-wrap:wrap;column-gap:10px;margin-top:4px}
+.price__now{font-size:28px;font-weight:800;color:var(--brand-dark)}
+.price__pack{font-size:14px;color:var(--muted)}
+.hero__shipping{font-size:14px;margin:4px 0;color:#215d38}
 .price__old{font-size:17px;color:#9a97a3;text-decoration:line-through}
 .price__save{background:#2e2a39;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px}
 .countdown{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#2e2a39;color:#fff;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:13px;font-weight:600}
@@ -209,6 +219,14 @@ section{padding:40px 0}
 .banner img{width:100%;height:auto}
 .banner__note{padding:8px 16px;text-align:center;color:var(--ok);font-weight:700}
 
+/* ---------- Guía de uso ---------- */
+.usage{background:#fff3ea;padding:28px 0}
+.usage__grid{display:grid;gap:12px;margin:16px auto 0;max-width:760px}
+.usage__grid > div{background:#fff;border:1px solid var(--brand-soft);border-radius:var(--radius);padding:14px 16px}
+.usage dt{font-size:16px;font-weight:700;margin-bottom:4px}
+.usage dd,.usage__note{font-size:14px;color:var(--muted)}
+.usage__note{max-width:760px;margin:14px auto 0}
+
 /* ---------- Dolores ---------- */
 .pain__kicker{display:block;text-align:center;font-size:12px;font-weight:800;letter-spacing:1.5px;color:var(--brand);margin-bottom:6px}
 .pain h2{font-weight:900;font-size:clamp(20px,5vw,28px)}
@@ -326,34 +344,39 @@ fbq('track', 'ViewContent', { content_name: 'Articumina', content_type: 'product
 </head>
 <body>
 
-<!-- 1. Ticker superior -->
-<div class="ticker" id="ticker1" aria-label="Beneficios de compra"></div>
-
 <!-- 2. Hero / ficha de producto + formulario -->
 <section class="hero">
   <div class="wrap hero__grid">
     <div class="gallery">
       <div class="gallery__main" id="galleryMain">
+        <div id="galleryPhoto">
+          <img id="coverPhoto" src="img/articumina-portada.webp"
+            srcset="img/articumina-portada-640.webp 640w, img/articumina-portada.webp 1122w"
+            sizes="(min-width: 1100px) 533px, (min-width: 900px) 48vw, calc(100vw - 32px)"
+            width="1122" height="1402" fetchpriority="high"
+            alt="Articumina Natural Caps. Fórmula 9 en 1 con 60 cápsulas.">
+        </div>
         <div class="gallery__badges" id="badges"></div>
       </div>
       <div class="gallery__thumbs" id="thumbs"></div>
     </div>
 
-    <div>
-      <div class="viewers" id="viewers"><span class="dot"></span><span><b id="viewersN">12</b> personas viendo este producto</span></div>
-      <h1 class="title" id="pTitle"></h1>
-      <div class="proof"><span class="stars" id="pStars">★★★★★</span><span id="pProof"></span></div>
-      <div class="chips" id="chips"></div>
-
-      <div class="price">
-        <span class="price__now" id="priceNow"></span>
-        <span class="price__old" id="priceOld"></span>
-        <span class="price__save" id="priceSave"></span>
-      </div>
-
-      <div class="countdown" id="countdown">
-        <span>⏳ LA OFERTA TERMINA EN</span>
-        <span class="countdown__time" id="cdTime">--:--</span>
+    <div class="hero__details">
+      <div class="hero__summary">
+        <div class="viewers" id="viewers"><span class="dot"></span><span><b id="viewersN">12</b> personas viendo este producto</span></div>
+        <h1 class="title">Articumina</h1>
+        <div class="price" aria-live="polite">
+          <span class="price__now" id="priceNow"></span>
+          <span class="price__pack" id="pricePack"></span>
+          <span class="price__old" id="priceOld"></span>
+          <span class="price__save" id="priceSave"></span>
+        </div>
+        <p class="hero__shipping"><b>Envío gratis</b> a todo Paraguay · Pagás al recibir</p>
+        <span class="stars" id="pStars">★★★★★</span>
+        <div class="countdown" id="countdown">
+          <span>⏳ LA OFERTA TERMINA EN</span>
+          <span class="countdown__time" id="cdTime">--:--</span>
+        </div>
       </div>
 
       <div class="buy" id="buyBox">
@@ -367,6 +390,27 @@ fbq('track', 'ViewContent', { content_name: 'Articumina', content_type: 'product
         <div class="hscroll" id="miniRevs"></div>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="usage" aria-labelledby="usageTitle">
+  <div class="wrap">
+    <h2 id="usageTitle">Cómo tomar Articumina</h2>
+    <dl class="usage__grid">
+      <div>
+        <dt>¿Cuánto y a qué hora?</dt>
+        <dd>Tomá 2 cápsulas al día con una comida, siguiendo las indicaciones del envase. Si el envase no indica una hora, elegí una comida que te sea fácil mantener. Un frasco rinde 30 días.</dd>
+      </div>
+      <div>
+        <dt>¿Para quién es?</dt>
+        <dd>Para adultos que buscan complementar su alimentación con nutrientes relacionados con el cuidado de los huesos y las articulaciones.</dd>
+      </div>
+      <div>
+        <dt>¿Qué aporta?</dt>
+        <dd>La vitamina D3 contribuye a la absorción del calcio y la vitamina K2 participa en el mantenimiento de los huesos. La fórmula también aporta curcumina y colágeno tipo II, una proteína presente en el cartílago.</dd>
+      </div>
+    </dl>
+    <p class="usage__note">Si estás embarazada, en lactancia o tomás medicamentos, especialmente anticoagulantes, consultá con un profesional de salud antes de usarlo.</p>
   </div>
 </section>
 
@@ -575,14 +619,8 @@ const CONFIG = {
 
   product: {
     name: "Articumina – Fórmula 9 en 1 con curcumina y colágeno tipo II",
-    proof: "Suplemento alimentario en cápsulas · 60 cápsulas · 30 días",
     badges: [],   // las fotos ya traen texto; las insignias lo tapaban
-    images: ["img/producto-1.webp", "img/producto-4.webp", "img/producto-5.webp"],
-    chips: [
-      { icon: "🧡", title: "Curcumina + colágeno tipo II", text: "Junto a 7 nutrientes más en una sola fórmula" },
-      { icon: "🦴", title: "Huesos y articulaciones", text: "D3, K2, magnesio y zinc contribuyen al mantenimiento normal de los huesos" },
-      { icon: "💊", title: "60 cápsulas", text: "2 al día: un frasco dura 30 días" }
-    ]
+    images: ["img/producto-1.webp", "img/producto-4.webp", "img/producto-5.webp"]
   },
 
   /* Precios del catálogo. compare = el mismo frasco comprado suelto (ahorro real del combo). */
@@ -622,7 +660,6 @@ const CONFIG = {
     "San Pedro": ["San Pedro del Ycuamandiyú","Santa Rosa del Aguaray","San Estanislao","Choré","Guayaibí","Lima","Tacuatí"]
   },
 
-  tickerTop: ["🚚 ENVÍO GRATIS A TODO EL PAÍS","💵 PAGÁS AL RECIBIR","📦 COMBOS DESDE 2 FRASCOS","💬 ATENCIÓN POR WHATSAPP"],
   tickerBottom: ["🧡 CURCUMINA","🦴 COLÁGENO TIPO II","☀️ VITAMINA D3","🥬 VITAMINA K2","⚡ MAGNESIO","🛡️ SELENIO","🔩 ZINC","🔋 COENZIMA Q10","🌿 MSM"],
 
   pain: {
@@ -643,10 +680,7 @@ const CONFIG = {
         text: "Suplemento alimentario en cápsulas para complementar tu alimentación diaria." },
       { label: "🦴 Qué aporta cada uno", heading: "Nutrientes relacionados con huesos y articulaciones",
         list: ["Curcumina: el compuesto principal de la cúrcuma","Colágeno tipo II: proteína estructural presente en el cartílago","Vitamina D3: contribuye a la absorción normal del calcio","Vitamina K2: participa en el metabolismo de los huesos","Magnesio y zinc: contribuyen al mantenimiento normal de los huesos","Selenio: participa en las defensas antioxidantes del cuerpo"],
-        text: "Información general de cada nutriente." },
-      { label: "💊 Cómo se toma", heading: "Simple de sumar a tu rutina",
-        list: ["📦 60 cápsulas por frasco","💊 2 cápsulas al día","📅 Un frasco dura 30 días","🚚 Te llega a tu casa y pagás al recibir"],
-        text: "Si estás embarazada, en lactancia o tomás medicación, consultá a tu médico antes de usarlo." }
+        text: "Información general de cada nutriente." }
     ]
   },
 
@@ -701,21 +735,19 @@ function ticker(el, items) {
 /* --- Hero --- */
 const P = CONFIG.product;
 document.title = P.name;
-$("pTitle").textContent = P.name;
-$("pProof").textContent = P.proof;
 $("badges").innerHTML = P.badges.map(b => `<span class="badge ${b.dark ? "dark" : ""}">${esc(b.text)}</span>`).join("");
-$("chips").innerHTML = P.chips.map(c => `<div class="chip"><span class="chip__ico">${c.icon}</span><div><b>${esc(c.title)}</b><span>${esc(c.text)}</span></div></div>`).join("");
 
+const coverPhoto = $("coverPhoto");
+const galleryImages = ["img/articumina-portada-640.webp", ...P.images];
 let current = 0;
 function showImage(i) {
   current = i;
-  const main = $("galleryMain");
-  main.querySelectorAll("img,.ph").forEach(n => n.remove());
-  main.insertAdjacentHTML("afterbegin", img(P.images[i], P.name, `Foto ${i + 1} · 1080×1080`));
+  const photo = $("galleryPhoto");
+  if (i === 0) photo.replaceChildren(coverPhoto);
+  else photo.innerHTML = img(galleryImages[i], P.name, `Foto ${i + 1}`);
   [...$("thumbs").children].forEach((b, j) => b.setAttribute("aria-current", j === i));
 }
-$("thumbs").style.gridTemplateColumns = `repeat(${P.images.length}, 1fr)`;
-$("thumbs").innerHTML = P.images.map((s, i) => `<button type="button" aria-label="Ver foto ${i + 1}">${img(s, "", "")}</button>`).join("");
+$("thumbs").innerHTML = galleryImages.map((s, i) => `<button type="button" aria-label="${i === 0 ? "Ver portada" : `Ver foto ${i + 1}`}">${img(s, "", "")}</button>`).join("");
 [...$("thumbs").children].forEach((b, i) => b.addEventListener("click", () => showImage(i)));
 showImage(0);
 
@@ -725,7 +757,7 @@ $("galleryMain").addEventListener("touchstart", e => x0 = e.touches[0].clientX, 
 $("galleryMain").addEventListener("touchend", e => {
   if (x0 === null) return;
   const dx = e.changedTouches[0].clientX - x0; x0 = null;
-  if (Math.abs(dx) > 40) showImage((current + (dx < 0 ? 1 : -1) + P.images.length) % P.images.length);
+  if (Math.abs(dx) > 40) showImage((current + (dx < 0 ? 1 : -1) + galleryImages.length) % galleryImages.length);
 });
 
 if (CONFIG.viewers) {
@@ -758,6 +790,7 @@ function renderOffers() {
 }
 function updatePrice() {
   $("priceNow").textContent = money(finalPrice(selected));
+  $("pricePack").textContent = selected.qty === 1 ? "1 frasco" : `${selected.qty} frascos`;
   $("priceOld").textContent = selected.compare || exitOff(selected) ? money(selected.compare || selected.price) : "";
   $("priceSave").textContent = pct(selected) ? `Ahorrá ${pct(selected)}%` : "";
   $("priceSave").hidden = !pct(selected);
@@ -1035,7 +1068,6 @@ $("revGrid").innerHTML = R.items.map(r => `<article class="rev"><div class="rev_
 }
 
 /* --- Secciones de contenido --- */
-ticker($("ticker1"), CONFIG.tickerTop);
 ticker($("ticker2"), CONFIG.tickerBottom);
 document.querySelectorAll("[data-banner-order]").forEach(button => {
   button.addEventListener("click", openCheckout);
