@@ -78,8 +78,7 @@ section{padding:40px 0}
 .badge.dark{background:#2e2a39}
 .gallery__thumbs{display:flex;gap:8px}
 @media (min-width:900px){.gallery__thumbs{margin-top:10px}}
-.gallery__thumbs button{width:54px}
-.gallery__thumbs button{border:2px solid transparent;border-radius:8px;overflow:hidden;padding:0;background:none;cursor:pointer}
+.gallery__thumbs button{width:54px;border:2px solid transparent;border-radius:8px;overflow:hidden;padding:0;background:none;cursor:pointer}
 .gallery__thumbs button[aria-current="true"]{border-color:var(--brand)}
 .gallery__thumbs img,.gallery__thumbs .ph{aspect-ratio:var(--gallery-ratio);object-fit:cover;font-size:0}
 .viewers{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-bottom:8px}
@@ -87,13 +86,8 @@ section{padding:40px 0}
 .dot{width:8px;height:8px;border-radius:50%;background:#e0245e;box-shadow:0 0 0 0 rgba(224,36,94,.6);animation:pulse 1.6s infinite}
 @keyframes pulse{70%{box-shadow:0 0 0 8px rgba(224,36,94,0)}100%{box-shadow:0 0 0 0 rgba(224,36,94,0)}}
 .title{font-size:clamp(24px,5.5vw,32px);font-weight:700;line-height:1.2}
+.proof{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:14px;color:var(--muted)}
 .stars{color:var(--star);letter-spacing:1px}
-.price{display:flex;align-items:center;flex-wrap:wrap;column-gap:10px;margin-top:4px}
-.price__now{font-size:28px;font-weight:800;color:var(--brand-dark)}
-.price__pack{font-size:14px;color:var(--muted)}
-.hero__shipping{font-size:14px;margin:4px 0;color:#215d38}
-.price__old{font-size:17px;color:#9a97a3;text-decoration:line-through}
-.price__save{background:#2e2a39;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px}
 .countdown{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#2e2a39;color:#fff;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:13px;font-weight:600}
 .countdown__time{font-variant-numeric:tabular-nums;font-size:20px;font-weight:800;letter-spacing:1px}
 
@@ -364,15 +358,8 @@ fbq('track', 'ViewContent', { content_name: 'Articumina', content_type: 'product
     <div class="hero__details">
       <div class="hero__summary">
         <div class="viewers" id="viewers"><span class="dot"></span><span><b id="viewersN">12</b> personas viendo este producto</span></div>
-        <h1 class="title">Articumina</h1>
-        <div class="price" aria-live="polite">
-          <span class="price__now" id="priceNow"></span>
-          <span class="price__pack" id="pricePack"></span>
-          <span class="price__old" id="priceOld"></span>
-          <span class="price__save" id="priceSave"></span>
-        </div>
-        <p class="hero__shipping"><b>Envío gratis</b> a todo Paraguay · Pagás al recibir</p>
-        <span class="stars" id="pStars">★★★★★</span>
+        <h1 class="title" id="pTitle"></h1>
+        <p class="proof"><span class="stars" id="pStars">★★★★★</span><span id="pProof"></span></p>
         <div class="countdown" id="countdown">
           <span>⏳ LA OFERTA TERMINA EN</span>
           <span class="countdown__time" id="cdTime">--:--</span>
@@ -619,8 +606,13 @@ const CONFIG = {
 
   product: {
     name: "Articumina – Fórmula 9 en 1 con curcumina y colágeno tipo II",
+    proof: "Suplemento alimentario en cápsulas · 60 cápsulas · 30 días",
     badges: [],   // las fotos ya traen texto; las insignias lo tapaban
-    images: ["img/producto-1.webp", "img/producto-4.webp", "img/producto-5.webp"]
+    images: [
+      { src: "img/producto-1.webp", thumb: "img/producto-1-thumb.webp" },
+      { src: "img/producto-4.webp", thumb: "img/producto-4-thumb.webp" },
+      { src: "img/producto-5.webp", thumb: "img/producto-5-thumb.webp" }
+    ]
   },
 
   /* Precios del catálogo. compare = el mismo frasco comprado suelto (ahorro real del combo). */
@@ -735,19 +727,21 @@ function ticker(el, items) {
 /* --- Hero --- */
 const P = CONFIG.product;
 document.title = P.name;
+$("pTitle").textContent = P.name;
+$("pProof").textContent = P.proof;
 $("badges").innerHTML = P.badges.map(b => `<span class="badge ${b.dark ? "dark" : ""}">${esc(b.text)}</span>`).join("");
 
 const coverPhoto = $("coverPhoto");
-const galleryImages = ["img/articumina-portada-640.webp", ...P.images];
+const galleryImages = [{ thumb: "img/articumina-portada-thumb.webp" }, ...P.images];
 let current = 0;
 function showImage(i) {
   current = i;
   const photo = $("galleryPhoto");
   if (i === 0) photo.replaceChildren(coverPhoto);
-  else photo.innerHTML = img(galleryImages[i], P.name, `Foto ${i + 1}`);
+  else photo.innerHTML = img(galleryImages[i].src, P.name, `Foto ${i + 1}`);
   [...$("thumbs").children].forEach((b, j) => b.setAttribute("aria-current", j === i));
 }
-$("thumbs").innerHTML = galleryImages.map((s, i) => `<button type="button" aria-label="${i === 0 ? "Ver portada" : `Ver foto ${i + 1}`}">${img(s, "", "")}</button>`).join("");
+$("thumbs").innerHTML = galleryImages.map((image, i) => `<button type="button" aria-label="${i === 0 ? "Ver portada" : `Ver foto ${i + 1}`}">${img(image.thumb, "", "")}</button>`).join("");
 [...$("thumbs").children].forEach((b, i) => b.addEventListener("click", () => showImage(i)));
 showImage(0);
 
@@ -789,14 +783,9 @@ function renderOffers() {
   });
 }
 function updatePrice() {
-  $("priceNow").textContent = money(finalPrice(selected));
-  $("pricePack").textContent = selected.qty === 1 ? "1 frasco" : `${selected.qty} frascos`;
-  $("priceOld").textContent = selected.compare || exitOff(selected) ? money(selected.compare || selected.price) : "";
-  $("priceSave").textContent = pct(selected) ? `Ahorrá ${pct(selected)}%` : "";
-  $("priceSave").hidden = !pct(selected);
   $("buyBtn").textContent = `Comprar ahora – ${money(finalPrice(selected))}`;
   const subtotal = selected.compare || selected.price;
-  $("sumImg").src = selected.img || P.images[0];
+  $("sumImg").src = selected.img || P.images[0].src;
   $("sumOffer").textContent = selected.title;
   $("sumSub2").textContent = selected.sub || "";
   $("sumPrice").textContent = money(finalPrice(selected));
