@@ -306,17 +306,19 @@ footer .legal{border-top:1px solid #4a4558;margin-top:24px;padding-top:16px;font
 .sticky-cta .cta{padding:14px;font-size:15px}
 .toast{position:fixed;left:12px;bottom:84px;z-index:45;display:flex;gap:10px;align-items:center;max-width:300px;background:#fff;border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.15);padding:10px 14px;font-size:13px;transform:translateX(calc(-100% - 24px));visibility:hidden;transition:transform .35s,visibility .35s}
 .toast.show{transform:none;visibility:visible}
-.wa-float{position:fixed;right:14px;bottom:84px;z-index:42;display:flex;align-items:center;gap:8px;padding:10px 16px 10px 12px;border-radius:999px;background:#25d366;color:#fff;font-weight:700;font-size:14px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.22);animation:waPulse 2.4s ease-in-out infinite}
-.wa-float svg{width:26px;height:26px;flex:none}
-.wa-float:hover{background:#1ebe5b}
-body:has(#checkout[open],#exitOffer[open]) .wa-float{display:none}
-@media (max-width:767px){
-  .wa-float{width:46px;height:46px;justify-content:center;padding:0}
-  .wa-float span,.wa-float.over-offer{display:none}
+.wa-float{
+  position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:42;
+  display:flex;align-items:center;gap:8px;min-height:46px;padding:5px 13px 5px 5px;
+  border:1px solid #98d7b0;border-radius:999px;background:#f1fff6;color:#17472c;
+  font-weight:700;font-size:clamp(12px,3.2vw,14px);text-decoration:none;
+  box-shadow:0 5px 16px #16432a30
 }
-@keyframes waPulse{0%,100%{box-shadow:0 6px 20px rgba(0,0,0,.22),0 0 0 0 rgba(37,211,102,.55)}50%{box-shadow:0 6px 20px rgba(0,0,0,.22),0 0 0 10px rgba(37,211,102,0)}}
-@media (prefers-reduced-motion:reduce){.wa-float{animation:none}}
-.to-top{position:fixed;right:14px;bottom:146px;z-index:41;width:40px;height:40px;border-radius:50%;border:0;background:var(--brand);color:#fff;font-size:18px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s}
+.wa-float svg{width:34px;height:34px;padding:5px;border-radius:50%;flex:none;background:#25d366;color:#103a25}
+.wa-float:hover{background:#dff9ea}
+.wa-float:focus-visible{outline:2px solid #14633c;outline-offset:3px}
+body:has(#checkout[open],#exitOffer[open]) .wa-float{display:none}
+@media (max-width:767px){.wa-float.over-offer{display:none}}
+.to-top{position:fixed;right:14px;bottom:calc(146px + env(safe-area-inset-bottom));z-index:41;width:40px;height:40px;border-radius:50%;border:0;background:var(--brand);color:#fff;font-size:18px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s}
 .to-top.show{opacity:1;pointer-events:auto}
 /* ---------- Descuento "antes de irte" ---------- */
 .exit{border:0;margin:auto;padding:20px 18px 10px;width:min(420px,calc(100% - 24px));max-height:calc(100dvh - 24px);border-radius:16px;background:#fff;color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.3)}
