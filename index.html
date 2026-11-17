@@ -340,6 +340,8 @@ body:has(#checkout[open],#exitOffer[open]) .wa-float{display:none}
 <!-- Meta Pixel: dataset "VENTA CAPI" de la cuenta VGSHOP PY Ventas. Purchase lleva eventID PY…:purchase,
      el mismo que manda el servidor (meta_purchase_outbox), así Meta no la cuenta dos veces. -->
 <script>
+const metaClickId = new URLSearchParams(location.search).get('fbclid') || '';
+const metaClickSeenAt = Date.now();
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
 if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
@@ -974,6 +976,12 @@ function localPhone(v) {
   return /^9\d{8}$/.test(d) ? "0" + d : "";
 }
 const cookie = n => (document.cookie.match(new RegExp("(?:^|; )" + n + "=([^;]*)")) || [])[1] || "";
+function metaPurchaseFbc() {
+  const stored = cookie("_fbc");
+  if (!/^[A-Za-z0-9_-]{1,280}$/.test(metaClickId)) return stored;
+  if (stored.endsWith("." + metaClickId)) return stored;
+  return `fb.1.${metaClickSeenAt}.${metaClickId}`;
+}
 function whatsappLink(order) {
   const lines = [`Hola! Quiero hacer un pedido:`, `🛍️ ${order.product}`, `📦 ${order.offer} – ${money(order.total)}`,
     `👤 ${order.name}`, `📞 ${order.phone}`, `📍 ${order.address}, ${order.city}, ${order.department}`,
@@ -1013,8 +1021,8 @@ $("orderForm").addEventListener("submit", async e => {
           ciudad: order.city, direccion: order.address, ubicacion_maps: order.maps,
           website: $("fWebsite").value, landing_url: order.page, user_agent: navigator.userAgent,
           utm_source: utm.get("utm_source") || "", utm_medium: utm.get("utm_medium") || "",
-          utm_campaign: utm.get("utm_campaign") || "", fbclid: utm.get("fbclid") || "",
-          meta_fbp: cookie("_fbp"), meta_fbc: cookie("_fbc"),
+          utm_campaign: utm.get("utm_campaign") || "", fbclid: metaClickId,
+          meta_fbp: cookie("_fbp"), meta_fbc: metaPurchaseFbc(),
           descuento: exitOff(selected) ? "salida" : "",
           ...(order.invoice ? {
             factura: true, ruc: order.invoice.ruc,
