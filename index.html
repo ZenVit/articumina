@@ -57,30 +57,29 @@ section{padding:40px 0}
 
 /* ---------- Hero / producto ---------- */
 .hero{padding:12px 0 26px}
-.hero__grid{display:grid;gap:14px}
-@media (max-width:899px){
-  .gallery,.hero__details{display:contents}
-  .hero__summary{order:1}
-  .gallery__thumbs{order:2}
-  .buy{order:3}
-  .mini-revs{order:4}
-}
+.hero__grid{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.gallery{width:100%;max-width:560px;justify-self:center}
+.hero__summary{margin-bottom:16px}
 @media (min-width:900px){
   .hero{padding-top:20px}
   .hero__grid{grid-template-columns:1.05fr 1fr;gap:28px;align-items:start}
   .gallery{position:sticky;top:16px}
-  .hero__summary{margin-bottom:16px}
 }
-.gallery__main{position:relative;border-radius:var(--radius);overflow:hidden;background:#faf7f9}
+.gallery__main{position:relative;border-radius:var(--radius);overflow:hidden;background:#faf7f9;touch-action:pan-y pinch-zoom}
 .gallery__main img,.gallery__main .ph{aspect-ratio:var(--gallery-ratio);object-fit:contain;width:100%;height:auto}
 .gallery__badges{position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:6px}
 .badge{display:inline-block;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;color:#fff;background:var(--brand)}
 .badge.dark{background:#2e2a39}
-.gallery__thumbs{display:flex;gap:8px}
-@media (min-width:900px){.gallery__thumbs{margin-top:10px}}
-.gallery__thumbs button{width:54px;border:2px solid transparent;border-radius:8px;overflow:hidden;padding:0;background:none;cursor:pointer}
+.gallery__controls{display:flex;align-items:center;justify-content:center;gap:clamp(4px,2vw,12px);margin-top:10px}
+.gallery__arrow{display:grid;place-items:center;flex:0 0 44px;height:44px;border:1px solid #efb48d;border-radius:50%;background:#fff3ea;color:#9e3b06;cursor:pointer;box-shadow:0 2px 6px #7b30051c}
+.gallery__arrow svg{width:21px;height:21px}
+.gallery__arrow:hover{background:#fde4d2}
+.gallery__arrow:focus-visible,.gallery__thumbs button:focus-visible,#buyBtn:focus-visible{outline:2px solid #956007;outline-offset:3px}
+.gallery__thumbs{display:flex;min-width:0;gap:4px}
+.gallery__thumbs button{width:54px;min-width:0;border:2px solid transparent;border-radius:8px;overflow:hidden;padding:0;background:none;cursor:pointer}
 .gallery__thumbs button[aria-current="true"]{border-color:var(--brand)}
-.gallery__thumbs img,.gallery__thumbs .ph{aspect-ratio:var(--gallery-ratio);object-fit:cover;font-size:0}
+.gallery__thumbs img,.gallery__thumbs .ph{width:100%;aspect-ratio:var(--gallery-ratio);object-fit:cover;font-size:0}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 .viewers{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-bottom:8px}
 .viewers b{color:var(--text)}
 .dot{width:8px;height:8px;border-radius:50%;background:#e0245e;box-shadow:0 0 0 0 rgba(224,36,94,.6);animation:pulse 1.6s infinite}
@@ -132,7 +131,12 @@ section{padding:40px 0}
 
 /* ---------- Checkout (ventana) ---------- */
 .buy{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
-.buy .cta{margin-top:14px}
+#buyBtn{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding:15px 16px;border-radius:12px;background:linear-gradient(135deg,#087d42,#075a34);box-shadow:0 5px 0 #064529,0 8px 18px #075a3340;text-align:left;text-transform:none;animation:none}
+#buyBtn:hover{background:linear-gradient(135deg,#096d3c,#064a2b)}
+.buy-cta__main{font-size:clamp(16px,4.5vw,20px);display:block;line-height:1.2;text-transform:uppercase}
+.buy-cta__price{display:block;font-size:14px;font-weight:600;margin-top:3px}
+.buy-cta__arrow{font-size:24px;line-height:1}
+.buy .trust{margin-top:16px}
 .checkout{border:0;padding:0;margin:auto;width:min(520px,100%);max-height:100dvh;border-radius:16px;background:#fff;color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 .checkout::backdrop{background:rgba(20,16,14,.6)}
 @media (max-width:560px){.checkout{margin:auto 0 0;max-width:100%;border-radius:16px 16px 0 0;max-height:94dvh}}
@@ -160,17 +164,19 @@ section{padding:40px 0}
 .order-sum .free,.order-sum dd.sum-save{color:var(--ok)}
 .order-sum .total{font-size:17px;font-weight:800;color:var(--text);padding-top:6px;border-top:1px solid var(--line)}
 .order-sum dd.total{color:var(--brand-dark)}
-.map-field{margin-top:10px}
-.map-field summary{padding:8px 0;font-size:13px;font-weight:700;color:var(--brand-dark);cursor:pointer}
-.map-field[open] summary{margin-bottom:4px}
+.map-field,.invoice{border:1px solid var(--brand-soft);border-radius:12px;background:#fffaf6;margin:12px 0;padding:12px}
+.map-field summary{font-size:14px;font-weight:700;color:#9e3b06;cursor:pointer}
+.map-field[open] summary{margin-bottom:10px}
+.invoice .check{align-items:center;margin:0;font-weight:700;font-size:14px}
+.invoice .check input{margin:0}
+.invoice__fields{margin-top:12px}
+.invoice__fields .field:last-child{margin-bottom:0}
 .geo-btn{width:100%;border:1.5px solid var(--brand);background:#fff6ef;color:var(--brand-dark);font:inherit;font-weight:700;font-size:14px;border-radius:10px;padding:11px;cursor:pointer;margin-bottom:8px}
 .geo-btn:disabled{opacity:.6;cursor:wait}
 .pick-map{height:220px;border-radius:10px;border:1px solid #d8d6de;overflow:hidden;background:#eef0f2;z-index:0}
 .map-hint{font-size:12px;color:var(--muted);margin-top:5px}
 .map-hint.ok{color:var(--ok);font-weight:600}
 .map-hint.bad{color:#c0233b}
-.map-hint.approx{color:var(--brand-dark);font-weight:600}
-.pin-ok{border:0;background:var(--ok);color:#fff;font:inherit;font-size:12px;font-weight:700;border-radius:999px;padding:4px 10px;margin:2px 2px;cursor:pointer}
 .done{padding:22px 16px 20px}
 .done__top{text-align:center;margin-bottom:16px}
 .done__check{width:58px;height:58px;margin:0 auto 10px;border-radius:50%;background:var(--ok);color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 8px #e7f6dc;animation:pop .45s ease-out}
@@ -341,18 +347,27 @@ fbq('track', 'ViewContent', { content_name: 'Articumina', content_type: 'product
 <!-- 2. Hero / ficha de producto + formulario -->
 <section class="hero">
   <div class="wrap hero__grid">
-    <div class="gallery">
+    <div class="gallery" role="group" aria-label="Fotos de Articumina">
       <div class="gallery__main" id="galleryMain">
         <div id="galleryPhoto">
           <img id="coverPhoto" src="img/articumina-portada.webp"
             srcset="img/articumina-portada-640.webp 640w, img/articumina-portada.webp 1122w"
-            sizes="(min-width: 1100px) 533px, (min-width: 900px) 48vw, calc(100vw - 32px)"
+            sizes="(min-width: 1100px) 533px, (min-width: 900px) 48vw, (min-width: 592px) 560px, calc(100vw - 32px)"
             width="1122" height="1402" fetchpriority="high"
             alt="Articumina Natural Caps. Fórmula 9 en 1 con 60 cápsulas.">
         </div>
         <div class="gallery__badges" id="badges"></div>
       </div>
-      <div class="gallery__thumbs" id="thumbs"></div>
+      <div class="gallery__controls">
+        <button class="gallery__arrow" type="button" id="galleryPrev" aria-label="Foto anterior" aria-controls="galleryPhoto">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>
+        </button>
+        <div class="gallery__thumbs" id="thumbs"></div>
+        <button class="gallery__arrow" type="button" id="galleryNext" aria-label="Foto siguiente" aria-controls="galleryPhoto">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+      <span class="sr-only" id="galleryStatus" role="status"></span>
     </div>
 
     <div class="hero__details">
@@ -368,7 +383,10 @@ fbq('track', 'ViewContent', { content_name: 'Articumina', content_type: 'product
 
       <div class="buy" id="buyBox">
         <div class="offers" id="offers" role="radiogroup" aria-label="Elegí tu oferta"></div>
-        <button class="cta" id="buyBtn" type="button">Comprar ahora – pago al recibir</button>
+        <button class="cta" id="buyBtn" type="button">
+          <span><span class="buy-cta__main">Comprar ahora</span><span class="buy-cta__price" id="buyPrice"></span></span>
+          <span class="buy-cta__arrow" aria-hidden="true">→</span>
+        </button>
         <div class="trust"><span>🚚 Envío gratis a todo el país</span><span>💵 Pagás al recibir</span><span>🔒 Compra segura</span></div>
       </div>
 
@@ -414,6 +432,20 @@ fbq('track', 'ViewContent', { content_name: 'Articumina', content_type: 'product
         <div class="field"><label for="fCity">Ciudad</label><select id="fCity" name="city" required disabled><option value="">Primero elegí el departamento</option></select>
           <input id="fCityOther" class="city-other" autocomplete="address-level2" placeholder="Escribí tu ciudad" hidden><div class="err">Elegí tu ciudad.</div></div>
         <div class="field"><label for="fAddr">Dirección</label><input id="fAddr" name="address" autocomplete="street-address" placeholder="Calle, número" required><div class="err">Escribí tu dirección.</div></div>
+        <details class="map-field" id="mapDetails" open>
+          <summary id="mapSummary">Agregar ubicación (opcional)</summary>
+          <button type="button" class="geo-btn" id="geoBtn">📍 Usar mi ubicación actual</button>
+          <div class="pick-map" id="pickMap" aria-label="Mapa para marcar la ubicación de entrega"></div>
+          <p class="map-hint" id="mapHint" role="status">Tocá el mapa donde está tu casa. Podés arrastrar el pin.</p>
+        </details>
+        <div class="invoice">
+          <label class="check"><input type="checkbox" id="fInvoice" aria-controls="invoiceFields"> Necesito factura legal</label>
+          <div class="invoice__fields" id="invoiceFields" hidden>
+            <div class="field"><label for="fRuc">RUC o CI</label><input id="fRuc" maxlength="20" autocomplete="off" placeholder="Ej. 80012345-6 o 1234567"><div class="err">Escribí tu RUC con dígito verificador o el número de CI.</div></div>
+            <div class="field"><label for="fRazon">Nombre o razón social</label><input id="fRazon" maxlength="150" autocomplete="organization"><div class="err">Escribí el nombre o la razón social.</div></div>
+            <div class="field"><label for="fInvEmail">Correo para la factura (opcional)</label><input id="fInvEmail" type="email" maxlength="120" autocomplete="email"><div class="err">Revisá el correo.</div></div>
+          </div>
+        </div>
         <div class="hp" aria-hidden="true"><label>No completar <input id="fWebsite" tabindex="-1" autocomplete="off"></label></div>
         <div class="order-sum">
           <h4>🧾 Resumen del pedido</h4>
@@ -428,17 +460,11 @@ fbq('track', 'ViewContent', { content_name: 'Articumina', content_type: 'product
           </dl>
         </div>
         <button class="cta" id="ctaBtn" type="submit">Confirmar pedido</button>
-        <details class="map-field" id="mapDetails">
-          <summary id="mapSummary">Agregar ubicación (opcional)</summary>
-          <button type="button" class="geo-btn" id="geoBtn">📍 Usar mi ubicación actual</button>
-          <div class="pick-map" id="pickMap" aria-label="Mapa para marcar la ubicación de entrega"></div>
-          <p class="map-hint" id="mapHint">O tocá el mapa donde está tu casa. Podés arrastrar el pin.</p>
-        </details>
         <ul class="cta-perks">
           <li>🚚 <b>Envío gratis</b> a todo el país</li>
           <li>💵 <b>No pagás nada ahora:</b> pagás cuando lo recibís</li>
           <li>💬 Te confirmamos el pedido por WhatsApp</li>
-          <li>🔒 Tus datos solo se usan para la entrega</li>
+          <li>🔒 Usamos tus datos para gestionar el pedido y la factura si la solicitás</li>
         </ul>
         <div class="form-msg" id="formMsg" role="status" aria-live="polite"></div>
       </form>
@@ -740,18 +766,28 @@ function showImage(i) {
   if (i === 0) photo.replaceChildren(coverPhoto);
   else photo.innerHTML = img(galleryImages[i].src, P.name, `Foto ${i + 1}`);
   [...$("thumbs").children].forEach((b, j) => b.setAttribute("aria-current", j === i));
+  $("galleryStatus").textContent = `Foto ${i + 1} de ${galleryImages.length}`;
+}
+function stepGallery(step) {
+  showImage((current + step + galleryImages.length) % galleryImages.length);
 }
 $("thumbs").innerHTML = galleryImages.map((image, i) => `<button type="button" aria-label="${i === 0 ? "Ver portada" : `Ver foto ${i + 1}`}">${img(image.thumb, "", "")}</button>`).join("");
 [...$("thumbs").children].forEach((b, i) => b.addEventListener("click", () => showImage(i)));
+$("galleryPrev").addEventListener("click", () => stepGallery(-1));
+$("galleryNext").addEventListener("click", () => stepGallery(1));
 showImage(0);
 
 /* swipe en la foto principal */
-let x0 = null;
-$("galleryMain").addEventListener("touchstart", e => x0 = e.touches[0].clientX, { passive: true });
+let swipeStart = null;
+$("galleryMain").addEventListener("touchstart", e => {
+  swipeStart = e.touches.length === 1 ? e.touches[0] : null;
+}, { passive: true });
 $("galleryMain").addEventListener("touchend", e => {
-  if (x0 === null) return;
-  const dx = e.changedTouches[0].clientX - x0; x0 = null;
-  if (Math.abs(dx) > 40) showImage((current + (dx < 0 ? 1 : -1) + galleryImages.length) % galleryImages.length);
+  if (!swipeStart) return;
+  const touch = e.changedTouches[0];
+  const dx = touch.clientX - swipeStart.clientX, dy = touch.clientY - swipeStart.clientY;
+  swipeStart = null;
+  if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) stepGallery(dx < 0 ? 1 : -1);
 });
 
 if (CONFIG.viewers) {
@@ -783,7 +819,7 @@ function renderOffers() {
   });
 }
 function updatePrice() {
-  $("buyBtn").textContent = `Comprar ahora – ${money(finalPrice(selected))}`;
+  $("buyPrice").textContent = `${money(finalPrice(selected))} · Pagás al recibir`;
   const subtotal = selected.compare || selected.price;
   $("sumImg").src = selected.img || P.images[0].src;
   $("sumOffer").textContent = selected.title;
@@ -836,12 +872,25 @@ const cityValue = () => $("fCity").value === OTHER_CITY ? $("fCityOther").value.
 $("fDept").addEventListener("change", fillCities);
 $("fCity").addEventListener("change", toggleOtherCity);
 
+const wantsInvoice = () => $("fInvoice").checked;
+const cleanRuc = value => value.replace(/[.\s]/g, "");
+const validInvoiceEmail = value => !value || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+function updateInvoiceFields() {
+  $("invoiceFields").hidden = !wantsInvoice();
+  if (!wantsInvoice()) $("invoiceFields").querySelectorAll(".invalid").forEach(field => field.classList.remove("invalid"));
+}
+$("fInvoice").addEventListener("change", updateInvoiceFields);
+updateInvoiceFields();
+
 function validate() {
   let ok = true;
   const rules = {
     fName: v => v.trim().length >= 3,
     fPhone: v => !!localPhone(v),
-    fDept: v => !!v, fCity: () => cityValue().length >= 2, fAddr: v => v.trim().length >= 4
+    fDept: v => !!v, fCity: () => cityValue().length >= 2, fAddr: v => v.trim().length >= 4,
+    fRuc: v => !wantsInvoice() || /^\d{5,9}(-\d)?$/.test(cleanRuc(v)),
+    fRazon: v => !wantsInvoice() || v.trim().length >= 3,
+    fInvEmail: v => !wantsInvoice() || validInvoiceEmail(v.trim())
   };
   for (const [id, fn] of Object.entries(rules)) {
     const f = $(id).closest(".field"), good = fn($(id).value);
@@ -852,10 +901,10 @@ function validate() {
 }
 
 /* --- Mapa de entrega (Leaflet + OpenStreetMap, se carga al abrir el checkout) --- */
-// url solo se llena con una ubicación confirmada (GPS, toque, arrastre o "Sí, es acá"):
-// el pin aproximado de la dirección escrita no se manda al delivery sin confirmar.
+// La ubicación se comparte al enviar el pedido, si el cliente marca el mapa o usa el GPS.
 const mapDetails = $("mapDetails");
-const pick = { map: null, marker: null, url: "", loading: null, lastQuery: "" };
+const pick = { map: null, marker: null, url: "", loading: null };
+const MAP_HINT = "Tocá el mapa donde está tu casa. Podés arrastrar el pin.";
 function loadLeaflet() {
   if (window.L) return Promise.resolve();
   if (pick.loading) return pick.loading;
@@ -865,12 +914,13 @@ function loadLeaflet() {
     document.head.appendChild(css);
     const js = document.createElement("script");
     js.src = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";
-    js.onload = ok; js.onerror = fail;
+    js.onload = ok;
+    js.onerror = () => { js.remove(); css.remove(); pick.loading = null; fail(); };
     document.head.appendChild(js);
   });
   return pick.loading;
 }
-function setPin(lat, lng, zoom, approx = false) {
+function setPin(lat, lng, zoom) {
   const pos = [+lat.toFixed(6), +lng.toFixed(6)];
   if (!pick.marker) {
     pick.marker = L.marker(pos, { draggable: true }).addTo(pick.map);
@@ -878,52 +928,16 @@ function setPin(lat, lng, zoom, approx = false) {
   } else pick.marker.setLatLng(pos);
   if (zoom) pick.map.setView(pos, zoom);
   const hint = $("mapHint");
-  if (approx) {
-    pick.url = "";
-    hint.className = "map-hint approx";
-    hint.innerHTML = `📍 Ubicación aproximada según tu dirección. <button type="button" class="pin-ok" id="pinOk">✅ Sí, es acá</button> o arrastrá el pin hasta tu casa.`;
-    $("pinOk").addEventListener("click", () => { const p = pick.marker.getLatLng(); setPin(p.lat, p.lng); });
-    return;
-  }
   pick.url = `https://www.google.com/maps?q=${pos[0]},${pos[1]}`;
   $("mapSummary").textContent = "Ubicación agregada (editar)";
   hint.className = "map-hint ok"; hint.textContent = "✅ Ubicación marcada. Si no es exacta, arrastrá el pin.";
 }
 
-// Con ciudad y dirección escritas, el mapa va a la zona aproximada (OpenStreetMap Nominatim).
-let geoTimer = null;
-function scheduleGeocode() {
-  clearTimeout(geoTimer);
-  if (mapDetails.open) geoTimer = setTimeout(geocode, 1000);
-}
-async function geocode() {
-  if (!mapDetails.open || !dlg.open || pick.url) return;
-  const city = cityValue(), addr = $("fAddr").value.trim(), dept = $("fDept").value;
-  if (city.length < 3) return;
-  const region = dept === city ? "" : dept;
-  const tries = [[addr, city, region], [city, region]].map(p => p.filter(Boolean).concat("Paraguay").join(", "));
-  if (addr.length < 4) tries.shift();
-  for (const [i, q] of tries.entries()) {
-    if (q === pick.lastQuery) return;
-    try {
-      const r = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=py&accept-language=es&q=${encodeURIComponent(q)}`);
-      const hit = (await r.json())[0];
-      if (!hit) continue;
-      if (!mapDetails.open || !dlg.open) return;
-      await initMap();
-      if (mapDetails.open && dlg.open && pick.map && !pick.url) {
-        pick.lastQuery = q;
-        setPin(+hit.lat, +hit.lon, i === 0 && addr.length >= 4 ? 17 : 14, true);
-      }
-      return;
-    } catch { return; }
-  }
-}
-["fCityOther", "fAddr"].forEach(id => $(id).addEventListener("input", scheduleGeocode));
-["fDept", "fCity"].forEach(id => $(id).addEventListener("change", scheduleGeocode));
 async function initMap() {
   try { await loadLeaflet(); } catch { $("mapHint").textContent = "No se pudo cargar el mapa. Podés seguir sin marcar la ubicación."; return; }
+  if (!mapDetails.open || !dlg.open || $("orderForm").hidden) return;
   if (pick.map) { pick.map.invalidateSize(); return; }
+  $("mapHint").textContent = MAP_HINT;
   pick.map = L.map("pickMap", { zoomControl: true, attributionControl: true }).setView([-25.2867, -57.647], 12);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(pick.map);
   pick.map.on("click", e => setPin(e.latlng.lat, e.latlng.lng));
@@ -931,7 +945,6 @@ async function initMap() {
 }
 mapDetails.addEventListener("toggle", () => {
   if (mapDetails.open && dlg.open) initMap();
-  scheduleGeocode();
 });
 $("geoBtn").addEventListener("click", () => {
   const hint = $("mapHint"), btn = $("geoBtn");
@@ -939,7 +952,7 @@ $("geoBtn").addEventListener("click", () => {
   btn.disabled = true; btn.textContent = "Buscando tu ubicación…";
   navigator.geolocation.getCurrentPosition(async p => {
     await initMap();
-    if (window.L && pick.map) setPin(p.coords.latitude, p.coords.longitude, 17);
+    if (mapDetails.open && dlg.open && !$("orderForm").hidden && pick.map) setPin(p.coords.latitude, p.coords.longitude, 17);
     btn.disabled = false; btn.textContent = "📍 Usar mi ubicación actual";
   }, () => {
     hint.className = "map-hint bad"; hint.textContent = "No pudimos obtener tu ubicación. Tocá el mapa donde está tu casa.";
@@ -959,7 +972,9 @@ const cookie = n => (document.cookie.match(new RegExp("(?:^|; )" + n + "=([^;]*)
 function whatsappLink(order) {
   const lines = [`Hola! Quiero hacer un pedido:`, `🛍️ ${order.product}`, `📦 ${order.offer} – ${money(order.total)}`,
     `👤 ${order.name}`, `📞 ${order.phone}`, `📍 ${order.address}, ${order.city}, ${order.department}`,
-    order.maps && `🗺️ ${order.maps}`, `💵 Pago contra entrega`].filter(Boolean);
+    order.maps && `🗺️ ${order.maps}`,
+    order.invoice && `🧾 Factura legal: ${order.invoice.razon} · RUC/CI ${order.invoice.ruc}${order.invoice.email ? ` · ${order.invoice.email}` : ""}`,
+    `💵 Pago contra entrega`].filter(Boolean);
   return `https://wa.me/${CONFIG.order.whatsapp}?text=${encodeURIComponent(lines.join("\n"))}`;
 }
 
@@ -974,7 +989,12 @@ $("orderForm").addEventListener("submit", async e => {
     // En el panel el interior figura como "Interior": la ciudad lleva el departamento para no perderlo.
     city: ["Asunción", "Central"].includes($("fDept").value) ? cityValue() : `${cityValue()}, ${$("fDept").value}`,
     address: $("fAddr").value.trim(),
-    maps: pick.url, page: location.href
+    maps: pick.url, page: location.href,
+    invoice: wantsInvoice() ? {
+      ruc: cleanRuc($("fRuc").value),
+      razon: $("fRazon").value.trim(),
+      email: $("fInvEmail").value.trim()
+    } : null
   };
   const btn = $("ctaBtn"); btn.disabled = true;
   btn.querySelector(".cta__main").textContent = "⏳ Enviando tu pedido…";
@@ -990,7 +1010,11 @@ $("orderForm").addEventListener("submit", async e => {
           utm_source: utm.get("utm_source") || "", utm_medium: utm.get("utm_medium") || "",
           utm_campaign: utm.get("utm_campaign") || "", fbclid: utm.get("fbclid") || "",
           meta_fbp: cookie("_fbp"), meta_fbc: cookie("_fbc"),
-          descuento: exitOff(selected) ? "salida" : ""
+          descuento: exitOff(selected) ? "salida" : "",
+          ...(order.invoice ? {
+            factura: true, ruc: order.invoice.ruc,
+            razon_social: order.invoice.razon, correo_factura: order.invoice.email
+          } : {})
         })
       });
       const data = await r.json().catch(() => ({}));
@@ -1013,7 +1037,7 @@ $("orderForm").addEventListener("submit", async e => {
     $("doneTitle").textContent = `¡Gracias, ${first}! Recibimos tu pedido`;
     $("doneId").textContent = orderId ? `Pedido N° ${orderId}` : "";
     $("doneId").hidden = !orderId;
-    $("doneImg").src = P.images[0];
+    $("doneImg").src = P.images[0].src;
     $("doneProduct").textContent = "Articumina";
     $("doneOffer").textContent = order.offer;
     $("doneAddr").textContent = `${order.address}, ${order.city}`;
@@ -1026,12 +1050,12 @@ $("orderForm").addEventListener("submit", async e => {
     $("doneWa").href = waUrl;
     dlg.scrollTop = 0;
     $("orderForm").hidden = true; $("checkoutDone").hidden = false;
-    $("orderForm").reset(); renderOffers();
-    mapDetails.open = false;
+    $("orderForm").reset(); updateInvoiceFields(); renderOffers();
+    mapDetails.open = true;
     $("mapSummary").textContent = "Agregar ubicación (opcional)";
     if (pick.marker) { pick.marker.remove(); pick.marker = null; }
     fillCities();
-    pick.url = ""; pick.lastQuery = ""; $("mapHint").className = "map-hint"; $("mapHint").textContent = "O tocá el mapa donde está tu casa. Podés arrastrar el pin.";
+    pick.url = ""; $("mapHint").className = "map-hint"; $("mapHint").textContent = MAP_HINT;
     // En el celular se abre WhatsApp solo; el botón queda por si el navegador no lo abre.
     if (orderId && matchMedia("(pointer:coarse)").matches) setTimeout(() => { location.href = waUrl; }, 1500);
   } catch (err) {
@@ -1102,7 +1126,7 @@ function openCheckout() {
   $("orderForm").hidden = false; $("checkoutDone").hidden = true; $("formMsg").className = "form-msg";
   if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
   document.body.style.overflow = "hidden";
-  mapDetails.open = false;
+  if (mapDetails.open) initMap();
   if (window.fbq) fbq("track", "InitiateCheckout", { value: finalPrice(selected), currency: "PYG" });
   if (window.zvVisitas) zvVisitas.track("begin_checkout");
 }
